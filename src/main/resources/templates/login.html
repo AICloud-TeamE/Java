@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン | 発注予測システム</title>
+</head>
+<body>
+    <!-- タイトル -->
+    <h1 th:text="${titleText}">発注予測システム</h1>
+
+    <!-- ログインフォーム -->
+    <form th:action="@{/login}" method="post" name="loginForm">
+        <!-- ユーザーID -->
+        <div>
+            <label for="inputId">ユーザーID：</label>
+            <input type="text" id="inputId" name="userId" placeholder="IDを入力してください"
+                   th:value="${userId != null} ? ${userId} : ''" required>
+        </div>
+
+        <!-- パスワード -->
+        <div>
+            <label for="inputPassword">パスワード：</label>
+            <input type="password" id="inputPassword" name="password" placeholder="パスワードを入力してください" required>
+        </div>
+
+        <!-- エラーメッセージ（任意） -->
+        <div th:if="${error}" style="color:red;">
+            <p th:text="${error}">ログイン情報に誤りがあります。</p>
+        </div>
+
+        <!-- ログインボタン -->
+        <div>
+            <button type="submit" id="loginButton">ログイン</button>
+        </div>
+
+        <!-- パスワード忘れリンク（任意） -->
+        <div>
+            <a th:href="@{/password/forgot}" id="forgotPwLink">パスワードを忘れた</a>
+        </div>
+    </form>
+</body>
+</html>
+
