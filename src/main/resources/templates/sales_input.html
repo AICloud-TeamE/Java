@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sales_input</title>
+    <link rel="stylesheet" href="sales_input.css">
+
+</head>
+
+<body>
+    <header>発注予測システム</header>
+    <div th:if="${role}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="#">需要予測</a></li>
+                <li><a href="#">需要実績入力</a></li>
+                <li><a href="#">販売実績と天気</a></li>
+                <li><a href="#">商品管理</a></li>
+                <li><a href="#">アカウント管理</a></li>
+                <li><a href="#">ログアウト</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <div>
+        <div id="date-display"></div>
+        <form action="#" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>商品単価（円）</th>
+                        <th>販売数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entry : ${bearDictionary}">
+                        <td th:text="${entry.key}"></td>
+                        <td th:text="${entry.value}"></td>
+                        <td><input type="number" class="quantity-input" th:data-price="${entry.value}" min="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>集計結果</h2>
+            <table>
+                <tr>
+                    <th>合計販売本数</th>
+                    <td id="total-quantity">0</td>
+                </tr>
+                <tr>
+                    <th>合計売上金額</th>
+                    <td id="total-sales">0 円</td>
+                </tr>
+            </table>
+            <p></p>
+            <button type="submit">登録</button>
+        </form>
+
+    </div>
+
+    <script>
+        function calculateTotals() {
+            let totalQuantity = 0;
+            let totalSales = 0;
+
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                let quantity = parseInt(input.value) || 0;
+                let price = parseInt(input.getAttribute("data-price"));
+
+                totalQuantity += quantity;
+                totalSales += quantity * price;
+            });
+
+            document.getElementById("total-quantity").textContent = totalQuantity;
+            document.getElementById("total-sales").textContent = totalSales + " 円";
+        }
+
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("input", calculateTotals);
+        });
+    </script>
+
+
+
+</body>
+
+</html>
