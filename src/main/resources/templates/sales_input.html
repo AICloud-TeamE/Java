@@ -11,16 +11,16 @@
 
 <body>
     <header>発注予測システム</header>
-    <div th:if="${role}">
+    <div th:if="${is_admin}">
         <aside>
             <ul>
                 <li><strong>メニュー</strong></li>
-                <li><a href="#">需要予測</a></li>
-                <li><a href="#">需要実績入力</a></li>
-                <li><a href="#">販売実績と天気</a></li>
-                <li><a href="#">商品管理</a></li>
-                <li><a href="#">アカウント管理</a></li>
-                <li><a href="#">ログアウト</a></li>
+                <li><a href="/forecast">需要予測</a></li>
+                <li><a href="/sales_input">需要実績入力</a></li>
+                <li><a href="/history_all">販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
             </ul>
         </aside>
     </div>
