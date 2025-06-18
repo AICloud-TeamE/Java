@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>アカウント一覧</title>
+</head>
+<body>
+    <h2>アカウント一覧</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>氏名</th>
+                <th>アカウントID</th>
+                <th>パスワード</th>
+                <th>権限</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.name}">名前</td>
+                <td th:text="${account.email}">メール</td>
+                <td th:text="${account.password}">パスワード</td>
+                <td th:text="${account.isAdmin} ? '管理者' : '従業員'">権限</td>
+                <td>
+                     <a th:href="@{'/admin/edit/' + ${account.id}}"><button>編集</button></a>
+                     <a th:href="@{'/admin/delete/' + ${account.id}}"
+                        onclick="return confirm('本当に削除しますか？')">
+                        <button>削除</button>
+                     </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/logout">ログアウト</a>
+</body>
+</html>

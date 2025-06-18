@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アカウント一覧</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 40px;
+            background-color: #fff;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: 1px solid #888;
+            border-radius: 4px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .add-button {
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f3f3f3;
+        }
+
+        .action-button {
+            margin: 0 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>アカウント一覧</h2>
+        <button class="add-button" onclick="location.href='/accounts/add'">アカウント追加</button>
+    </div>
+
+    <div class="search-filter">
+        <input type="text" placeholder="Search tickets..." />
+        <button>Filter</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>氏名</th>
+                <th>アカウントID</th>
+                <th>パスワード</th>
+                <th>権限</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.name}">山田太郎</td>
+                <td th:text="${account.email}">yamada@example.com</td>
+                <td th:text="${account.password}">yamadatarou</td>
+                <td th:text="${account.role == 'admin' ? '管理者' : '従業員'}">従業員</td>
+                <td>
+                    <button class="action-button" th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
+                    <button class="action-button" th:onclick="'location.href=\'/accounts/delete/' + ${account.id} + '\''">削除</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
