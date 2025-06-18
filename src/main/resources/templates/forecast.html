@@ -119,15 +119,14 @@
             <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
         </tr>
     </thead>
-    <tbody>
-        <tr th:each="forecast : ${fiveDayForecastList}">
-            <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
-            <td th:text="${forecast.weather}">晴れ</td>
-            <td th:text="${forecast.temperatureRange}">25〜30℃</td>
-            <td th:each="entry : ${predictedDemandMap}"
-                th:text="${forecast[entry.key]} + '本'">0本</td>
-        </tr>
-    </tbody>
+<tbody>
+    <tr th:each="forecast : ${sevenDayForecastList}">
+        <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
+        <td th:text="${forecast.weather}">晴れ</td>
+        <td th:text="${forecast.temperatureRange}">25〜30℃</td>
+        <td th:each="entry : ${forecast.predictedDemandMap}" th:text="${entry.value + '本'}">0本</td>
+    </tr>
+</tbody>
 </table>
 
 </body>
