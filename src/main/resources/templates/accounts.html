@@ -106,7 +106,19 @@
                 <td th:text="${account.role == 'admin' ? '管理者' : '従業員'}">従業員</td>
                 <td>
                     <button class="action-button" th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
-                    <button class="action-button" th:onclick="'location.href=\'/accounts/delete/' + ${account.id} + '\''">削除</button>
+                <button class="action-button" th:onclick="'confirmDelete(' + ${account.id} + ')'">削除</button>
+
+
+
+                <script>
+                 function confirmDelete(id) {
+                  if (confirm('本当にこのアカウントを削除しますか？')) {
+                  window.location.href = '/accounts/delete/' + id;
+                     }
+                  }
+                </script>
+
+
                 </td>
             </tr>
         </tbody>
