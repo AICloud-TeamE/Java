@@ -2,11 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>商品追加 | 発注予測システム</title>
+    <title>商品管理 | 発注予測システム</title>
 </head>
 <body>
+
+    <div th:if="${is_admin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
+                <li><a href="/sales_input">需要実績入力</a></li>
+                <li><a href="/history_all">販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
+    </div>
     <!-- タイトル -->
-    <h2 th:text="${pageTitle}">商品追加</h2>
+    <h2 th:text="${pageTitle}">商品管理</h2>
 
     <!-- 商品追加フォーム -->
     <form th:action="@{/add-product}" method="post" name="addForm">
