@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -57,51 +57,64 @@
 </head>
 <body>
 
-    <div class="header">
-        <h1>需要予測</h1>
-        <div class="year-selector" id="year-display"></div>
+<div class="header">
+    <h1>需要予測</h1>
+    <div class="year-selector" id="year-display"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const year = new Date().getFullYear();
+        document.getElementById('year-display').textContent = `${year}年`;
+
+        const forecastDateDiv = document.getElementById('forecast-date');
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+
+        const forecastLabel = {
+            1: '火・水・木の需要予測',
+            4: '金・土・月の需要予測'
+        };
+
+        if (forecastLabel[dayOfWeek]) {
+            forecastDateDiv.textContent = forecastLabel[dayOfWeek];
+        } else {
+            forecastDateDiv.textContent = '';
+        }
+    });
+</script>
+
+<!-- 発注対象日の表示（条件付き） -->
+<div class="forecast-date" id="forecast-date"></div>
+
+<!-- 商品別予測本数 -->
+<div class="product-forecast">
+    <div th:each="entry : ${predictedDemandMap}">
+        <span th:text="${entry.key}">ビール名</span><br>
+        <span th:text="${entry.value + '本'}">0本</span>
     </div>
+</div>
 
-    <script>
-        // JavaScriptで現在の年を表示
-        document.addEventListener('DOMContentLoaded', function () {
-            const year = new Date().getFullYear();
-            document.getElementById('year-display').textContent = `${year}年`;
-        });
-    </script>
-
-    <!-- 次の発注日 -->
-    <div class="forecast-date">
-        次の発注日：<span th:text="${#temporals.format(nextOrderDate, 'yyyy年M月d日')}">2025年6月16日</span>
-    </div>
-
-    <!-- 商品別予測本数 -->
-    <div class="product-forecast">
-        <div th:each="entry : ${predictedDemandMap}">
-            <span th:text="${entry.key}">ビール名</span><br>
-            <span th:text="${entry.value + '本'}">0本</span>
-        </div>
-    </div>
-
-    <!-- 日別販売履歴 -->
-    <table>
-        <thead>
-            <tr>
-                <th>日付</th>
-                <th>天気予報</th>
-                <th>気温</th>
-                <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="sale : ${dailySalesList}">
-                <td th:text="${#temporals.format(sale.date, 'M月d日(E)')}">6月13日(金)</td>
-                <td th:text="${sale.weather}">晴れ</td>
-                <td th:text="${sale.temperatureRange}">26〜28℃</td>
-                <td th:each="entry : ${predictedDemandMap}" th:text="${sale[entry.key]} + '本'">0本</td>
-            </tr>
-        </tbody>
-    </table>
+<!-- 次の5日間の天気予報と予測表示 -->
+<table>
+    <thead>
+        <tr>
+            <th>日付</th>
+            <th>天気予報</th>
+            <th>気温</th>
+            <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="forecast : ${fiveDayForecastList}">
+            <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
+            <td th:text="${forecast.weather}">晴れ</td>
+            <td th:text="${forecast.temperatureRange}">25〜30℃</td>
+            <td th:each="entry : ${predictedDemandMap}"
+                th:text="${forecast[entry.key]} + '本'">0本</td>
+        </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
