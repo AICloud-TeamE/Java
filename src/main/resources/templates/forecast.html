@@ -7,38 +7,7 @@
         body {
             font-family: sans-serif;
             margin: 0;
-            display: flex;
-        }
-
-        /* サイドメニュー */
-        .sidebar {
-            width: 200px;
-            background-color: #f7f7f7;
-            padding: 20px;
-            height: 100vh;
-            border-right: 1px solid #ccc;
-        }
-
-        .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar li {
-            margin-bottom: 15px;
-            color: #555;
-        }
-
-        /* メイン */
-        .main-content {
-            flex-grow: 1;
             padding: 30px;
-            position: relative;
         }
 
         .header {
@@ -62,6 +31,7 @@
             gap: 30px;
             font-weight: bold;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .product-forecast div {
@@ -83,104 +53,53 @@
         th {
             background-color: #f0f0f0;
         }
-
-        .bold {
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
 
-    <!-- サイドバー -->
-    <div class="sidebar">
-        <h2>メニュー</h2>
-        <ul>
-            <li>需要予測</li>
-            <li>販売実績入力</li>
-            <li>販売実績と天気表示</li>
-            <li>（週）販売実績と天気</li>
-            <li>商品管理</li>
-            <li>アカウント管理</li>
-            <li style="color: #c44;">ログアウト</li>
-        </ul>
+    <div class="header">
+        <h1>需要予測</h1>
+        <div class="year-selector">
+            <select>
+                <option>2025年</option>
+                <option>2024年</option>
+                <option>2023年</option>
+            </select>
+        </div>
     </div>
 
-    <!-- メイン画面 -->
-    <div class="main-content">
-        <div class="header">
-            <h1>需要予測</h1>
-            <div class="year-selector">
-                <select>
-                    <option>2025年</option>
-                    <option>2024年</option>
-                    <option>2023年</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- 次の発注日 -->
-        <div class="forecast-date">
-            次の発注日：<span th:text="${#temporals.format(nextOrderDate, 'yyyy年M月d日')}">2025年6月16日</span>
-        </div>
-
-        <!-- 商品別予測本数 -->
-        <div class="product-forecast">
-            <div>
-                ホワイトビール<br>
-                <span th:text="${predictedDemandMap['ホワイトビール']} + '本'">30本</span>
-            </div>
-            <div>
-                ラガー<br>
-                <span th:text="${predictedDemandMap['ラガー']} + '本'">36本</span>
-            </div>
-            <div>
-                ペールエール<br>
-                <span th:text="${predictedDemandMap['ペールエール']} + '本'">90本</span>
-            </div>
-            <div>
-                フルーツビール<br>
-                <span th:text="${predictedDemandMap['フルーツビール']} + '本'">70本</span>
-            </div>
-            <div>
-                黒ビール<br>
-                <span th:text="${predictedDemandMap['黒ビール']} + '本'">120本</span>
-            </div>
-            <div>
-                IPA<br>
-                <span th:text="${predictedDemandMap['IPA']} + '本'">20本</span>
-            </div>
-        </div>
-
-        <!-- 日別販売履歴 -->
-        <table>
-            <thead>
-                <tr>
-                    <th>日付</th>
-                    <th>天気予報</th>
-                    <th>気温</th>
-                    <th>ホワイトビール</th>
-                    <th>ラガー</th>
-                    <th>ペールエール</th>
-                    <th>フルーツビール</th>
-                    <th>黒ビール</th>
-                    <th>IPA</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="sale : ${dailySalesList}">
-                    <td th:text="${#temporals.format(sale.date, 'M月d日(E)')}">6月13日(金)</td>
-                    <td th:text="${sale.weather}">晴れ</td>
-                    <td th:text="${sale.temperatureRange}">26〜28℃</td>
-                    <td th:text="${sale.whiteBeer} + '本'">15本</td>
-                    <td th:text="${sale.lager} + '本'">18本</td>
-                    <td th:text="${sale.paleAle} + '本'">58本</td>
-                    <td th:text="${sale.fruitBeer} + '本'">34本</td>
-                    <td th:text="${sale.blackBeer} + '本'">50本</td>
-                    <td th:text="${sale.ipa} + '本'">7本</td>
-                </tr>
-            </tbody>
-        </table>
-
+    <!-- 次の発注日 -->
+    <div class="forecast-date">
+        次の発注日：<span th:text="${#temporals.format(nextOrderDate, 'yyyy年M月d日')}">2025年6月16日</span>
     </div>
+
+    <!-- 商品別予測本数 -->
+    <div class="product-forecast">
+        <div th:each="entry : ${predictedDemandMap}">
+            <span th:text="${entry.key}">ビール名</span><br>
+            <span th:text="${entry.value + '本'}">0本</span>
+        </div>
+    </div>
+
+    <!-- 日別販売履歴 -->
+    <table>
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>天気予報</th>
+                <th>気温</th>
+                <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="sale : ${dailySalesList}">
+                <td th:text="${#temporals.format(sale.date, 'M月d日(E)')}">6月13日(金)</td>
+                <td th:text="${sale.weather}">晴れ</td>
+                <td th:text="${sale.temperatureRange}">26〜28℃</td>
+                <td th:each="entry : ${predictedDemandMap}" th:text="${sale[entry.key]} + '本'">0本</td>
+            </tr>
+        </tbody>
+    </table>
+
 </body>
 </html>
