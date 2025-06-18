@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -59,14 +59,16 @@
 
     <div class="header">
         <h1>需要予測</h1>
-        <div class="year-selector">
-            <select>
-                <option>2025年</option>
-                <option>2024年</option>
-                <option>2023年</option>
-            </select>
-        </div>
+        <div class="year-selector" id="year-display"></div>
     </div>
+
+    <script>
+        // JavaScriptで現在の年を表示
+        document.addEventListener('DOMContentLoaded', function () {
+            const year = new Date().getFullYear();
+            document.getElementById('year-display').textContent = `${year}年`;
+        });
+    </script>
 
     <!-- 次の発注日 -->
     <div class="forecast-date">
