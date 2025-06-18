@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アカウント編集</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            max-width: 700px;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 10px 15px;
+            border: 1px solid #000;
+            font-size: 16px;
+        }
+        th {
+            background-color: #f9f9f9;
+            text-align: left;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            font-size: 16px;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+        .button-group {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .save-button, .cancel-button {
+            background-color: #fff;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+<h2>アカウント編集</h2>
+
+<!-- id は動的にセットされるように -->
+<form method="POST" th:action="@{/accounts/{id}(id=${account.id})}" onsubmit="event.preventDefault(); updateAccount();">
+    <input type="hidden" name="_method" value="PUT" />
+
+    <table>
+        <thead>
+            <tr><th>項目</th><th>詳細</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>氏名</td>
+                <td><input type="text" name="username" th:value="${account.username}" required></td>
+            </tr>
+            <tr>
+                <td>メールアドレス</td>
+                <td><input type="email" name="email" th:value="${account.email}" required></td>
+            </tr>
+            <tr>
+                <td>権限</td>
+                <td>
+                    <select name="role">
+                        <option value="管理者" th:selected="${account.role == '管理者'}">管理者</option>
+                        <option value="一般" th:selected="${account.role == '一般'}">一般</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-group">
+        <button type="submit" class="save-button">変更を保存</button>
+        <button type="button" class="cancel-button" onclick="window.history.back();">キャンセル</button>
+    </div>
+</form>
+
+<script>
+    function updateAccount() {
+        const form = document.querySelector("form");
+        const formData = new FormData(form);
+        const data = {
+            username: formData.get("username"),
+            email: formData.get("email"),
+            role: formData.get("role")
+        };
+
+        fetch(form.action, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("アカウントが更新されました");
+                window.location.href = "/accounts"; // 一覧画面に戻る例
+            } else {
+                alert("更新に失敗しました");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
