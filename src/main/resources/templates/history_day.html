@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>販売履歴（日別）</title>
+    <style>
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .header-section {
+            width: 90%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .weather-info img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .date-info {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .editor-info {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .table-edit-button {
+            padding: 4px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .table-edit-button:hover {
+            background-color: #45a049;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 80px;
+        }
+
+        input[type="text"] {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-section">
+    <div class="date-info">
+        <span id="date"></span>（<span id="dayOfWeek"></span>）
+    </div>
+
+    <div class="weather-info">
+        <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
+        <div>
+            <div>最高気温: <span th:text="${model.highestTemperture}">--</span>℃</div>
+            <div>最低気温: <span th:text="${model.lowestTemperture}">--</span>℃</div>
+        </div>
+    </div>
+
+    <div class="editor-info">
+        編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span th:text="${model.editor}">--</span>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>商品名</th>
+            <th>価格（円）</th>
+            <th>販売本数</th>
+            <th>売上（円）</th>
+            <th>備考</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
+            <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
+
+            <!-- 価格 -->
+            <td>
+                <span th:text="${beer.price}"></span>
+                <input type="number" th:value="${beer.price}" style="display:none;">
+            </td>
+
+            <!-- 数量 -->
+            <td>
+                <span th:text="${beer.unit}"></span>
+                <input type="number" th:value="${beer.unit}" style="display:none;">
+            </td>
+
+            <!-- 売上 -->
+            <td>
+                <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
+                <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;">
+            </td>
+
+            <!-- 備考 -->
+            <td>
+                <span th:text="${beer.note} ?: '-'"></span>
+                <input type="text" th:value="${beer.note}" style="display:none;">
+            </td>
+
+            <!-- 操作 -->
+            <td>
+                <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    // 日付と曜日を表示
+    const date = new Date();
+    document.getElementById("date").textContent = date.toLocaleDateString();
+    document.getElementById("dayOfWeek").textContent = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+
+    // 編集モード切り替え
+    function toggleEdit(button) {
+        const row = button.closest('tr');
+        const inputs = row.querySelectorAll('input');
+        const spans = row.querySelectorAll('span');
+        const isEditing = button.textContent === '保存';
+
+        inputs.forEach(input => input.style.display = isEditing ? 'none' : 'inline-block');
+        spans.forEach(span => span.style.display = isEditing ? 'inline' : 'none');
+
+        if (isEditing) {
+            // 保存時に値更新
+            const price = parseInt(row.cells[1].querySelector('input').value) || 0;
+            const unit = parseInt(row.cells[2].querySelector('input').value) || 0;
+            const revenue = parseInt(row.cells[3].querySelector('input').value) || 0;
+            const note = row.cells[4].querySelector('input').value;
+
+            row.cells[1].querySelector('span').textContent = price;
+            row.cells[2].querySelector('span').textContent = unit;
+            row.cells[3].querySelector('span').textContent = revenue;
+            row.cells[4].querySelector('span').textContent = note || '-';
+
+            button.textContent = '編集';
+        } else {
+            button.textContent = '保存';
+        }
+    }
+</script>
+
+</body>
+</html>
