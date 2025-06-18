@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>販売実績と天気（週）</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS コード */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* 上部に寄せる */
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 1200px;
+            /* 必要に応じて調整 */
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            /* 上部に少し余白 */
+            margin-bottom: 20px;
+            /* 下部に少し余白 */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #eee;
+        }
+
+        .sidebar-header h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.2em;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            color: #555;
+        }
+
+        .menu-item:hover {
+            background-color: #e9e9e9;
+        }
+
+        .menu-item.active {
+            background-color: #e0f7fa;
+            /* Light blue */
+            color: #007bff;
+            /* Darker blue for active item */
+            font-weight: bold;
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            /* For the grid background */
+            background-image: linear-gradient(to right, #f7f7f7 1px, transparent 1px),
+                linear-gradient(to bottom, #f7f7f7 1px, transparent 1px);
+            background-size: 20px 20px;
+            /* Size of the grid cells */
+            background-position: top left;
+            height: 60px;
+            /* Adjust height for the grid */
+            background-color: #fdfdfd;
+            /* A slightly off-white for the header area */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .tabs {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border-right: 1px solid #ddd;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab.active {
+            background-color: #fff;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #666;
+        }
+
+        .icon-grid {
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-header-container {
+            margin-bottom: 15px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .chart-header h2 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .calendar-icon {
+            font-size: 1.2em;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .weather-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            /* 下線を追加 */
+            padding-bottom: 10px;
+        }
+
+        .weather-day {
+            text-align: center;
+            flex: 1;
+            /* 各要素が均等な幅になるように */
+        }
+
+        .weather-day .date-label {
+            font-size: 0.8em;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .weather-day .weather-icon-large {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .weather-icon-large.sunny {
+            color: #ffc107;
+        }
+
+        /* 晴れ */
+        .weather-icon-large.cloudy {
+            color: #9e9e9e;
+        }
+
+        /* 曇り */
+        .weather-icon-large.rainy {
+            color: #42a5f5;
+        }
+
+        /* 雨 */
+
+        /* Chart.js のコンテナ */
+        .chart-container-wrapper {
+            position: relative;
+            height: 400px;
+            /* グラフの高さを固定 */
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>メニュー</h3>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li class="menu-item active">
+                        <i class="fas fa-chart-line"></i>
+                        <span>需要予測</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-edit"></i>
+                        <span>販売実績入力</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>販売実績と天気表示...</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>(週) 販売実績と天気...</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-box-open"></i>
+                        <span>商品管理</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-user-circle"></i>
+                        <span>アカウント管理</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>ログアウト</span>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <div class="tabs">
+                        <span class="tab active">販売実績と天気一覧（週）</span>
+                        <span class="tab">発注予測システム</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span>KOBAYASHI</span>
+                    <i class="fas fa-th-large icon-grid"></i>
+                </div>
+            </header>
+
+            <section class="chart-section">
+                <div class="chart-header-container">
+                    <div class="chart-header">
+                        <h2>週ごとの販売実績と天気</h2>
+                        <i class="fas fa-calendar-alt calendar-icon"></i>
+                    </div>
+                    <div class="weather-row" id="weatherIcons">
+                    </div>
+                </div>
+                <div class="chart-container-wrapper">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // JavaScript コード
+
+        // document.addEventListener('DOMContentLoaded', () => {
+        // 統計データ (ダミーデータ)
+        //  const historyData = [
+        //    { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
+        //  { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
+        //{ day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
+        // { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
+        //   { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
+        // { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
+        // ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Thymeleaf からデータを取得
+            const historyList = [
+                /*[# th:each="history, iterStat : ${historyList}"]*/
+                {
+                    day: "/*[[${history.day}]]*/",
+                    date: "/*[[${history.date}]]*/",
+                    weather: "/*[[${history.weather}]]*/",
+                    highestTemperature: /*[[${history.highestTemperature}]]*/,
+                    lowestTemperature: /*[[${history.lowestTemperature}]]*/,
+                    totalSales: /*[[${history.totalSales}]]*/
+    } /*[(${!iterStat.last ? ',' : ''})]*/
+                /*[/]*/
+            ];
+
+            // Chart.js 用のデータ抽出
+            const labels = historyList.map(data => data.day);
+            const salesData = historyList.map(data => data.totalSales);
+            const highestTempData = historyList.map(data => data.highestTemperature);
+            const lowestTempData = historyList.map(data => data.lowestTemperature);
+
+            // 天気アイコンのマッピング
+            const weatherIconMap = {
+                'sunny': 'fas fa-sun sunny',
+                'cloudy': 'fas fa-cloud cloudy',
+                'rainy': 'fas fa-cloud-showers-heavy rainy',
+            };
+
+            // 天気アイコンと日付を表示
+            const weatherIconsContainer = document.getElementById('weatherIcons');
+            historyData.forEach(data => {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('weather-day');
+                dayElement.innerHTML = `
+                    <div class="date-label">${data.date}</div>
+                    <i class="${weatherIconMap[data.weather]} weather-icon-large"></i>
+                `;
+                weatherIconsContainer.appendChild(dayElement);
+            });
+
+
+            // Chart.js の設定
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar', // デフォルトは棒グラフ
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '売上',
+                            data: salesData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)', // 棒グラフの色
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-sales', // 売上用のY軸
+                            order: 2 // 棒グラフを奥に表示
+                        },
+                        {
+                            label: '最高気温',
+                            data: highestTempData,
+                            type: 'line', // 折れ線グラフ
+                            borderColor: 'rgb(255, 99, 132)', // 赤系
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: false,
+                            tension: 0.3, // カーブの度合い
+                            yAxisID: 'y-temp', // 気温用のY軸
+                            order: 1 // 折れ線グラフを手前に表示
+                        },
+                        {
+                            label: '最低気温',
+                            data: lowestTempData,
+                            type: 'line', // 折れ線グラフ
+                            borderColor: 'rgb(54, 162, 235)', // 青系
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            fill: false,
+                            tension: 0.3, // カーブの度合い
+                            yAxisID: 'y-temp', // 気温用のY軸
+                            order: 1 // 折れ線グラフを手前に表示
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // コンテナの高さに合わせる
+                    scales: {
+                        'y-sales': {
+                            type: 'linear',
+                            position: 'left', // 左側に配置
+                            title: {
+                                display: true,
+                                text: '売上 (円)'
+                            },
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false // 売上軸のグリッド線は表示しない
+                            }
+                        },
+                        'y-temp': {
+                            type: 'linear',
+                            position: 'right', // 右側に配置
+                            title: {
+                                display: true,
+                                text: '気温 (°C)'
+                            },
+                            grid: {
+                                drawOnChartArea: true // 気温軸のグリッド線は表示する
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '°C';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
