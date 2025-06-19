@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sales_input</title>
-    <link rel="stylesheet" href="sales_input.css">
-
+    <link rel="stylesheet" href="sales_input.css"> <!-- 外部スタイルシートを読み込む -->
 </head>
 
 <body>
     <header>発注予測システム</header>
+
+    <!-- 管理者のみメニュー表示 -->
     <div th:if="${is_admin}">
         <aside>
             <ul>
@@ -25,9 +26,11 @@
         </aside>
     </div>
 
+    <!-- 今日の日付を表示する部分 -->
+    <div id="date-display"></div>
+
     <div>
-        <div id="date-display"></div>
-        <form action="#" method="post">
+        <form action="/" method="post"> <!-- フォームの送信先を設定 -->
             <table>
                 <thead>
                     <tr>
@@ -37,10 +40,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="entry : ${bearDictionary}">
-                        <td th:text="${entry.key}"></td>
-                        <td th:text="${entry.value}"></td>
-                        <td><input type="number" class="quantity-input" th:data-price="${entry.value}" min="0"></td>
+                    <!-- Thymeleafを使用して商品のリストを動的に生成 -->
+                    <tr th:each="bear : ${bearList}">
+                        <td th:text="${bear.name}"></td> <!-- 商品名 -->
+                        <td th:text="${bear.price}"></td> <!-- 商品単価 -->
+                        <td>
+                            <input type="number" class="quantity-input" th:data-price="${bear.price}" min="0">
+                            <!-- 数量入力欄 -->
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -49,43 +56,51 @@
             <table>
                 <tr>
                     <th>合計販売本数</th>
-                    <td id="total-quantity">0</td>
+                    <td id="total-quantity">0</td> <!-- 販売本数の合計を表示 -->
                 </tr>
                 <tr>
                     <th>合計売上金額</th>
-                    <td id="total-sales">0 円</td>
+                    <td id="total-sales">0 円</td> <!-- 売上金額の合計を表示 -->
                 </tr>
             </table>
-            <p></p>
-            <button type="submit">登録</button>
-        </form>
 
+            <button type="submit">登録</button> <!-- 販売数を登録 -->
+        </form>
     </div>
 
     <script>
+        // 今日の日付を取得して表示
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date();
+            const formattedDate = today.getFullYear() + "年"
+                + (today.getMonth() + 1) + "月"
+                + today.getDate() + "日";
+
+            document.getElementById("date-display").textContent = "今日の日付: " + formattedDate;
+        });
+
+        // 販売数の計算処理
         function calculateTotals() {
             let totalQuantity = 0;
             let totalSales = 0;
 
             document.querySelectorAll(".quantity-input").forEach(input => {
-                let quantity = parseInt(input.value) || 0;
-                let price = parseInt(input.getAttribute("data-price"));
+                let quantity = Math.max(0, parseInt(input.value) || 0); // 負の値を防ぐ
+                let price = parseFloat(input.getAttribute("data-price"));
 
                 totalQuantity += quantity;
                 totalSales += quantity * price;
             });
 
             document.getElementById("total-quantity").textContent = totalQuantity;
-            document.getElementById("total-sales").textContent = totalSales + " 円";
+            document.getElementById("total-sales").textContent = `${totalSales.toFixed(2)} 円`; // 小数点以下を含める
         }
-
+        
+        // 販売数が入力されたら集計
         document.querySelectorAll(".quantity-input").forEach(input => {
-            input.addEventListener("input", calculateTotals);
+            input.addEventListener("input", calculateTotals); // 入力ごとに計算を更新
         });
     </script>
-
-
-
 </body>
 
 </html>
