@@ -56,7 +56,7 @@
 <h2>アカウント編集</h2>
 
 <!-- id は動的にセットされるように -->
-<form method="POST" th:action="@{/accounts/:id{id}(id=${account.id})}" onsubmit="event.preventDefault(); updateAccount();">
+<form method="POST" th:action="@{/accounts/edit}" onsubmit="event.preventDefault(); updateAccount();">
     <input type="hidden" name="_method" value="PUT" />
 
     <table>
