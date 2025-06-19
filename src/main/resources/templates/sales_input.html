@@ -34,7 +34,7 @@
         aside {
             background-color: #fff177; /* サイドバーの背景色を明るい黄色 (#FFF177) に設定 */
             padding: 20px; /* 内側の余白を20pxに設定 */
-            width: 220px; /* 幅を220pxに設定 */
+            width: 200px; /* 幅を220pxに設定 */
             position: fixed; /* 画面の左側に固定表示 */
             /*top: 0; /* 上端からの距離を0pxに設定 */
             left: 0; /* 左端からの距離を0pxに設定 */
@@ -128,13 +128,14 @@
 <body>
     <header>発注予測システム</header>
 
-    <div th:if="${is_admin}">
+    <div th:if="${isAdmin}">
         <aside>
             <ul>
                 <li><strong>メニュー</strong></li>
                 <li><a href="/forecast">需要予測</a></li>
                 <li><a href="/sales_input">需要実績入力</a></li>
-                <li><a href="/history_all">販売実績と天気</a></li>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
                 <li><a href="/products">商品管理</a></li>
                 <li><a href="/accounts">アカウント管理</a></li>
                 <li><a href="/login">ログアウト</a></li>
