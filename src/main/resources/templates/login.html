@@ -3,12 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <title>ログイン | 発注予測システム</title>
+    <style>
+        /* ===== 全体設定 ===== */
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ===== ヘッダー ===== */
+        header {
+            background-color: #ffc107;
+            color: black;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* ===== ログインフォームのラッパー ===== */
+        .content {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 30px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* ===== ボタン中央寄せ ===== */
+        .button-container {
+            text-align: center;
+        }
+
+        button {
+            background-color: #FFC107;
+            color: black;
+            padding: 10px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #FFA000;
+        }
+    </style>
 </head>
 <body>
-    <!-- タイトル -->
-    <h1>発注予測システム</h1>
 
-    <!-- ログインフォーム -->
+<header>発注予測システム</header>
+
+<div class="content">
+    <h1>ログイン</h1>
+
     <form th:action="@{/login}" method="post" name="loginForm">
         <!-- ユーザーID -->
         <div>
@@ -23,16 +104,17 @@
             <input type="password" id="inputPassword" name="password" placeholder="パスワードを入力してください" required>
         </div>
 
-        <!-- エラーメッセージ（任意） -->
-        <div th:if="${error}" style="color:red;">
+        <!-- エラーメッセージ -->
+        <div th:if="${error}" class="error">
             <p th:text="${error}">ログイン情報に誤りがあります。</p>
         </div>
 
-        <!-- ログインボタン -->
-        <div>
+        <!-- ログインボタン中央寄せ -->
+        <div class="button-container">
             <button type="submit" id="loginButton">ログイン</button>
         </div>
     </form>
+</div>
+
 </body>
 </html>
-
