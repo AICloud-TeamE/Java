@@ -5,11 +5,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>registration_result</title>
+    <style>
+        /* ===== 全体のスタイル設定 ===== */
+
+        body {
+            background-color: white;
+            /* ページ全体の背景色を白に設定 */
+            font-family: Arial, sans-serif;
+            /* フォントはArial、なければsans-serifを使用 */
+            margin: 0;
+            /* ページの外側の余白をゼロに設定 */
+            padding: 0;
+            /* ページ内側の余白をゼロに設定 */
+        }
+
+        /* ===== ヘッダーのデザイン ===== */
+        header {
+            background-color: #ffc107;
+            /* ヘッダーの背景色を黄色系に設定 */
+            color: black;
+            /* ヘッダーの文字色を黒に設定 */
+            padding: 20px;
+            /* ヘッダー内部の余白を上下左右20pxに設定 */
+            font-size: 24px;
+            /* フォントサイズを24pxに設定して大きめに */
+            text-align: center;
+            /* テキストを中央寄せにする */
+            font-weight: bold;
+            /* フォントを太字にする */
+        }
+
+        /* ===== サイドバーのデザイン ===== */
+        aside {
+            background-color: #fff177;
+            /* サイドバーの背景を明るい黄色に設定 */
+            padding: 20px;
+            /* 内側の余白を20pxに */
+            width: 220px;
+            /* サイドバーの幅を220pxに固定 */
+            position: fixed;
+            /* 常に左端に固定表示されるようにする */
+            left: 0;
+            /* 左端に配置 */
+            height: 100%;
+            /* 高さを画面全体に広げる */
+        }
+
+        aside ul {
+            list-style: none;
+            /* デフォルトのリストマーカーを非表示 */
+            padding: 0;
+            /* 内側の余白をなくす */
+        }
+
+        aside ul li {
+            margin-bottom: 15px;
+            /* リストアイテム間の縦の余白を設定 */
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            /* リンクの下線を削除 */
+            color: black;
+            /* リンクの文字色を黒に設定 */
+            font-weight: bold;
+            /* 太字で表示 */
+            display: block;
+            /* ブロック要素として扱い、クリック範囲を広げる */
+            padding: 8px;
+            /* リンク内の余白を8pxに設定 */
+            border-radius: 5px;
+            /* 角丸の半径を5pxに */
+            transition: background-color 0.3s;
+            /* ホバー時の色変化を0.3秒でなめらかに */
+        }
+
+        aside ul li a:hover {
+            background-color: #FFD54F;
+            /* ホバー時に背景色をやや濃い黄色に変更 */
+        }
+
+        /* ===== メインコンテンツのデザイン ===== */
+        .content {
+            margin-left: 250px;
+            /* サイドバーの幅分だけ左にスペースを空ける */
+            padding: 20px;
+            /* 内部の余白 */
+            text-align: center;
+            /* 中央揃えで整える */
+        }
+
+        h2 {
+            color: #333;
+            /* 見出しの文字色をやや暗めのグレーに */
+        }
+
+        p {
+            font-size: 18px;
+            /* 本文テキストのサイズを18pxに */
+            color: #555;
+            /* 本文の文字色を中間グレーに設定 */
+        }
+
+        /* ===== 「ホームへ戻る」ボタンのデザイン ===== */
+        .button-container {
+            margin-top: 20px;
+            /* 上との間隔を確保 */
+        }
+
+        .home-button {
+            display: inline-block;
+            /* インライン要素として扱いつつ幅と高さを持たせる */
+            background-color: #FFC107;
+            /* 黄色系の背景色 */
+            color: black;
+            /* 文字色は黒 */
+            padding: 10px 20px;
+            /* 縦10px、横20pxの余白 */
+            border-radius: 5px;
+            /* 角を丸くする */
+            text-decoration: none;
+            /* 下線をなくす */
+            font-weight: bold;
+            /* 太字にする */
+            transition: background-color 0.3s;
+            /* 背景色の変化にアニメーションをつける */
+        }
+
+        .home-button:hover {
+            background-color: #FFA000;
+            /* ホバー時に濃いめの黄色に変更 */
+        }
+    </style>
+
 </head>
 
 <body>
     <header>発注予測システム</header>
-    <div th:if="${is_admin}">
+
+    <div th:if="${isAdmin}">
         <aside>
             <ul>
                 <li><strong>メニュー</strong></li>
@@ -23,11 +157,13 @@
         </aside>
     </div>
 
-    <div>
+    <div class="content">
         <h2>登録が完了しました！</h2>
         <p>販売データが正常に登録されました。</p>
 
-        <a href="/home">ホームへ戻る</a>
+        <div class="button-container">
+            <a href="/home" class="home-button">ホームへ戻る</a>
+        </div>
     </div>
 
 </body>
