@@ -55,13 +55,10 @@
 <h2>アカウント編集</h2>
 
 <!-- id は動的にセットされるように -->
-<form method="POST" th:action="@{/accounts/{id}(id=${account.id})}" onsubmit="event.preventDefault(); updateAccount();">
+<form method="POST" th:action="@{/accounts/success{id}(id=${account.id})}" onsubmit="event.preventDefault(); updateAccount();">
     <input type="hidden" name="_method" value="PUT" />
 
     <table>
-        <thead>
-            <tr><th>項目</th><th>詳細</th></tr>
-        </thead>
         <tbody>
             <tr>
                 <td>氏名</td>
@@ -74,9 +71,9 @@
             <tr>
                 <td>権限</td>
                 <td>
-                    <select name="role">
-                        <option value="管理者" th:selected="${account.role == '管理者'}">管理者</option>
-                        <option value="一般" th:selected="${account.role == '一般'}">一般</option>
+                    <select name="isAdmin">
+                        <option value="管理者" th:selected="${account.isAdmin == '管理者'}">管理者</option>
+                        <option value="一般" th:selected="${account.isAdmin == '一般'}">一般</option>
                     </select>
                 </td>
             </tr>
