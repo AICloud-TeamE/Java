@@ -73,6 +73,19 @@
     </style>
 </head>
 <body>
+ <div th:if="${is_admin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
+                <li><a href="/sales_input">需要実績入力</a></li>
+                <li><a href="/history_all">販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
+    </div>
 
 <div class="header-section">
     <div class="date-info">
@@ -82,8 +95,8 @@
     <div class="weather-info">
         <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
         <div>
-            <div>最高気温: <span th:text="${model.highestTemperture}">--</span>℃</div>
-            <div>最低気温: <span th:text="${model.lowestTemperture}">--</span>℃</div>
+            <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
+            <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
         </div>
     </div>
 
@@ -99,7 +112,6 @@
             <th>価格（円）</th>
             <th>販売本数</th>
             <th>売上（円）</th>
-            <th>備考</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -124,13 +136,6 @@
                 <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
                 <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;">
             </td>
-
-            <!-- 備考 -->
-            <td>
-                <span th:text="${beer.note} ?: '-'"></span>
-                <input type="text" th:value="${beer.note}" style="display:none;">
-            </td>
-
             <!-- 操作 -->
             <td>
                 <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
@@ -146,33 +151,49 @@
     document.getElementById("dayOfWeek").textContent = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
 
     // 編集モード切り替え
-    function toggleEdit(button) {
-        const row = button.closest('tr');
-        const inputs = row.querySelectorAll('input');
-        const spans = row.querySelectorAll('span');
-        const isEditing = button.textContent === '保存';
+   function toggleEdit(button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input');
+    const spans = row.querySelectorAll('span');
+    const isEditing = button.textContent === '保存';
 
-        inputs.forEach(input => input.style.display = isEditing ? 'none' : 'inline-block');
-        spans.forEach(span => span.style.display = isEditing ? 'inline' : 'none');
+    inputs.forEach(input => input.style.display = isEditing ? 'none' : 'inline-block');
+    spans.forEach(span => span.style.display = isEditing ? 'inline' : 'none');
 
-        if (isEditing) {
-            // 保存時に値更新
-            const price = parseInt(row.cells[1].querySelector('input').value) || 0;
-            const unit = parseInt(row.cells[2].querySelector('input').value) || 0;
-            const revenue = parseInt(row.cells[3].querySelector('input').value) || 0;
-            const note = row.cells[4].querySelector('input').value;
+    if (isEditing) {
+        const price = parseInt(row.cells[1].querySelector('input').value) || 0;
+        const unit = parseInt(row.cells[2].querySelector('input').value) || 0;
+        const revenue = parseInt(row.cells[3].querySelector('input').value) || 0;
+        const name = row.querySelector('td[data-name]').getAttribute('data-name');
 
-            row.cells[1].querySelector('span').textContent = price;
-            row.cells[2].querySelector('span').textContent = unit;
-            row.cells[3].querySelector('span').textContent = revenue;
-            row.cells[4].querySelector('span').textContent = note || '-';
+        // 表示用に更新
+        row.cells[1].querySelector('span').textContent = price;
+        row.cells[2].querySelector('span').textContent = unit;
+        row.cells[3].querySelector('span').textContent = revenue;
 
-            button.textContent = '編集';
-        } else {
-            button.textContent = '保存';
-        }
+        // フォームに値を設定して送信
+        const form = document.getElementById('editForm');
+        form.elements['name'].value = name;
+        form.elements['price'].value = price;
+        form.elements['unit'].value = unit;
+        form.elements['revenue'].value = revenue;
+
+        form.submit(); // 🔁 ここで /save にPOST遷移
+
+        button.textContent = '編集';
+    } else {
+        button.textContent = '保存';
     }
+}
+
 </script>
+
+        <form id="editForm" method="post" action="/save">
+           <input type="hidden" name="name">
+            <input type="hidden" name="price">
+            <input type="hidden" name="unit">
+            <input type="hidden" name="revenue">
+        </form>
 
 </body>
 </html>
