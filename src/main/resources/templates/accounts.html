@@ -91,7 +91,7 @@
     </thead>
     <tbody>
         <tr th:each="account : ${accounts}">
-            <td th:text="${account.username}">山田太郎</td>
+            <td th:text="${account.name}">山田太郎</td>
             <td th:text="${account.email}">yamada@example.com</td>
             <td th:text="${account.password}">password</td>
             <td th:text="${account.isAdmin} ? '管理者' : '従業員'">従業員</td>
