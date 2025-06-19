@@ -4,18 +4,119 @@
     <meta charset="UTF-8">
     <title>商品管理 | 発注予測システム</title>
     <style>
+        /* ===== 全体設定 ===== */
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ===== ヘッダー ===== */
+        header {
+            background-color: #ffc107;
+            color: black;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* ===== サイドバー ===== */
+        aside {
+            background-color: #fff177;
+            padding: 20px;
+            width: 220px;
+            position: fixed;
+            left: 0;
+            height: 100%;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin-bottom: 15px;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            display: block;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        aside ul li a:hover {
+            background-color: #FFD54F;
+        }
+
+        /* ===== メインコンテンツエリア ===== */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin: 20px auto;
+            width: fit-content;
+            text-align: left;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
         input[type="text"], input[type="number"] {
-            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+            width: 150px;
         }
-        .edit-mode input {
-            display: inline-block;
+
+        button {
+            background-color: #FFC107;
+            color: black;
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .edit-mode span {
-            display: none;
+
+        button:hover {
+            background-color: #FFA000;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f3f3f3;
         }
     </style>
 </head>
 <body>
+
+<header>発注予測システム</header>
 
 <div th:if="${is_admin}">
     <aside>
@@ -31,72 +132,74 @@
     </aside>
 </div>
 
-<h2>商品管理</h2>
+<div class="content">
+    <h2>商品管理</h2>
 
-<!-- 商品追加フォーム -->
-<form th:action="@{/add-product}" method="post" name="addForm">
-    <div>
-        <label for="productName">商品名：</label>
-        <input type="text" id="productName" name="productName" placeholder="商品名を入力してください" required>
-    </div>
-    <div>
-        <label for="productPrice">単価：</label>
-        <input type="number" id="productPrice" name="productPrice" placeholder="単価を入力してください" min="0" required>
-    </div>
-    <div>
-        <button type="submit" id="submitButton">登録</button>
-    </div>
-</form>
+    <!-- 商品追加フォーム -->
+    <form th:action="@{/add-product}" method="post" name="addForm">
+        <div>
+            <label for="productName">商品名：</label>
+            <input type="text" id="productName" name="productName" placeholder="商品名を入力してください" required>
+        </div>
+        <div>
+            <label for="productPrice">単価：</label>
+            <input type="number" id="productPrice" name="productPrice" placeholder="単価を入力してください" min="0" required>
+        </div>
+        <div>
+            <button type="submit" id="submitButton">登録</button>
+        </div>
+    </form>
 
-<hr>
+    <hr>
 
-<h2>商品一覧</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>商品名</th>
-            <th>単価</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="product : ${productList}" th:attr="data-id=${product.id}">
-            <!-- 商品名 -->
-            <td>
-                <span th:text="${product.name}">商品名</span>
-                <input type="text" name="editName" th:value="${product.name}" style="display: none;">
-            </td>
+    <h2>商品一覧</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>商品名</th>
+                <th>単価</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${productList}" th:attr="data-id=${product.id}">
+                <!-- 商品名 -->
+                <td>
+                    <span th:text="${product.name}">商品名</span>
+                    <input type="text" name="editName" th:value="${product.name}" style="display: none;">
+                </td>
 
-            <!-- 単価 -->
-            <td>
-                <span th:text="${product.price}">単価</span>
-                <input type="number" name="editPrice" th:value="${product.price}" style="display: none;">
-            </td>
+                <!-- 単価 -->
+                <td>
+                    <span th:text="${product.price}">単価</span>
+                    <input type="number" name="editPrice" th:value="${product.price}" style="display: none;">
+                </td>
 
-            <!-- 操作 -->
-            <td>
-                <!-- 編集ボタン -->
-                <button type="button" onclick="toggleEdit(this)">編集</button>
+                <!-- 操作 -->
+                <td>
+                    <!-- 編集ボタン -->
+                    <button type="button" onclick="toggleEdit(this)">編集</button>
 
-                <!-- 編集保存フォーム -->
-                <form th:action="@{/edit-product}" method="post" style="display:inline;" onsubmit="return submitEdit(this)">
-                    <input type="hidden" name="id" th:value="${product.id}">
-                    <input type="hidden" name="name">
-                    <input type="hidden" name="price">
-                    <button type="submit" style="display: none;">保存</button>
-                </form>
+                    <!-- 編集保存フォーム -->
+                    <form th:action="@{/edit-product}" method="post" style="display:inline;" onsubmit="return submitEdit(this)">
+                        <input type="hidden" name="id" th:value="${product.id}">
+                        <input type="hidden" name="name">
+                        <input type="hidden" name="price">
+                        <button type="submit" style="display: none;">保存</button>
+                    </form>
 
-                <!-- 削除フォーム -->
-                <form th:action="@{/delete-product/{id}(id=${product.id})}" method="post" style="display:inline;">
-                    <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-                </form>
-            </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(productList)}">
-            <td colspan="3">商品が登録されていません。</td>
-        </tr>
-    </tbody>
-</table>
+                    <!-- 削除フォーム -->
+                    <form th:action="@{/delete-product/{id}(id=${product.id})}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(productList)}">
+                <td colspan="3">商品が登録されていません。</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <script>
     function toggleEdit(btn) {
@@ -105,7 +208,6 @@
         const inputs = row.querySelectorAll('input[type="text"], input[type="number"]');
         const saveButton = row.querySelector('form button[type="submit"]');
 
-        // 編集モード切替
         const editing = btn.textContent === '保存';
 
         inputs.forEach(el => el.style.display = editing ? 'none' : 'inline-block');
