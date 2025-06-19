@@ -5,12 +5,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sales_input</title>
-    <link rel="stylesheet" href="sales_input.css">
+    <style>
+        /* ===== 全体のスタイル設定 ===== */
+        
+        /* 背景を白に設定し、フォントを統一 */
+        body { 
+            background-color: white; /* 背景色を白に設定 */
+            font-family: Arial, sans-serif; /* フォントをArialに設定し、代替としてsans-serifを使用 */
+            margin: 0; /* ページの余白をなくす */
+            padding: 0; /* ページのパディングをなくす */
+        }
 
+        /* ===== ヘッダーのデザイン ===== */
+        
+        /* ヘッダー部分のスタイルを設定 */
+        header {
+            background-color: #ffc107; /* ヘッダーの背景色を黄色系 (#FFC107) に設定 */
+            color: black; /* 文字色を黒に設定 */
+            padding: 20px; /* 内側の余白を20pxに設定 */
+            font-size: 24px; /* フォントサイズを24pxに設定 */
+            text-align: center; /* テキストを中央揃えにする */
+            font-weight: bold; /* フォントを太字にする */
+        }
+
+        /* ===== サイドバーのデザイン ===== */
+        
+        /* サイドバーのレイアウト設定 */
+        aside {
+            background-color: #fff177; /* サイドバーの背景色を明るい黄色 (#FFF177) に設定 */
+            padding: 20px; /* 内側の余白を20pxに設定 */
+            width: 220px; /* 幅を220pxに設定 */
+            position: fixed; /* 画面の左側に固定表示 */
+            /*top: 0; /* 上端からの距離を0pxに設定 */
+            left: 0; /* 左端からの距離を0pxに設定 */
+            height: 100%; /* 高さを画面いっぱいに設定 */
+        }
+
+        /* サイドバーのリストデザイン */
+        aside ul {
+            list-style: none; /* リストのデフォルトのマーカーを削除 */
+            padding: 0; /* 内側の余白をなくす */
+        }
+
+        /* リストアイテムの間隔調整 */
+        aside ul li {
+            margin-bottom: 15px; /* 各リストアイテムの間隔を15pxに設定 */
+        }
+
+        /* リンクのデザイン */
+        aside ul li a {
+            text-decoration: none; /* 下線を削除 */
+            color: black; /* 文字色を黒に設定 */
+            font-weight: bold; /* フォントを太字にする */
+            display: block; /* リンクをブロック要素として扱う */
+            padding: 8px; /* 内側の余白を8pxに設定 */
+            border-radius: 5px; /* 角を丸くする */
+            transition: background-color 0.3s; /* 背景色の変更をスムーズにする */
+        }
+
+        /* リンクのホバー時のスタイル */
+        aside ul li a:hover {
+            background-color: #FFD54F; /* ホバー時の背景色を少し濃い黄色 (#FFD54F) に変更 */
+        }
+
+        /* ===== コンテンツのスタイル ===== */
+        
+        /* メインコンテンツのレイアウト調整 */
+        div.content { 
+            margin-left: 250px; /* サイドバーの幅に合わせて左側の余白を確保 */
+            padding: 20px; /* 内側の余白を設定 */
+        }
+
+        /* ===== テーブルのデザイン ===== */
+        
+        /* テーブル全体のスタイル */
+        table {
+            width: 100%; /* テーブルを画面幅いっぱいにする */
+            border-collapse: collapse; /* セルのボーダーをまとめる */
+            margin-top: 20px; /* 上の要素との余白を20pxに設定 */
+        }
+
+        /* ヘッダーセルとデータセルの共通スタイル */
+        th, td {
+            border: 1px solid #ddd; /* セルの境界線を薄いグレーに設定 */
+            padding: 10px; /* 内側の余白を10pxに設定 */
+            text-align: center; /* テキストを中央揃えにする */
+        }
+
+        /* テーブルのヘッダーセルの背景色 */
+        th {
+            background-color: #FFEB3B; /* ヘッダーセルの背景色を明るい黄色 (#FFEB3B) に設定 */
+        }
+
+        /* ===== ボタンのデザイン ===== */
+        
+        /* ボタンのコンテナを右寄せ */
+        .button-container {
+            display: flex; /* ボタンをフレックスボックスで配置 */
+            justify-content: flex-end; /* ボタンを右寄せ */
+            margin-top: 20px; /* 上部に余白を設定 */
+        }
+
+        /* ボタンの基本デザイン */
+        button {
+            background-color: #FFC107; /* ボタンの背景色を黄色系 (#FFC107) に設定 */
+            color: black; /* 文字色を黒に設定 */
+            padding: 10px 20px; /* 内側の余白を上下10px、左右20pxに設定 */
+            border: none; /* ボーダーをなくす */
+            cursor: pointer; /* ホバー時にカーソルをポインターに変更 */
+            font-size: 16px; /* フォントサイズを16pxに設定 */
+            border-radius: 5px; /* 角を丸くする */
+            transition: background-color 0.3s; /* 背景色の変更をスムーズにする */
+        }
+
+        /* ボタンのホバー時のスタイル */
+        button:hover {
+            background-color: #FFA000; /* ホバー時の背景色を濃い黄色 (#FFA000) に変更 */
+        }
+    </style>
 </head>
 
 <body>
     <header>発注予測システム</header>
+
     <div th:if="${is_admin}">
         <aside>
             <ul>
@@ -25,9 +142,10 @@
         </aside>
     </div>
 
-    <div>
+    <div class="content">
         <div id="date-display"></div>
-        <form action="#" method="post">
+
+        <form action="/" method="post">
             <table>
                 <thead>
                     <tr>
@@ -37,10 +155,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="entry : ${bearDictionary}">
-                        <td th:text="${entry.key}"></td>
-                        <td th:text="${entry.value}"></td>
-                        <td><input type="number" class="quantity-input" th:data-price="${entry.value}" min="0"></td>
+                    <tr th:each="bear : ${bearList}">
+                        <td th:text="${bear.name}"></td>
+                        <td th:text="${bear.price}"></td>
+                        <td>
+                            <input type="number" class="quantity-input" th:data-price="${bear.price}" min="0">
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -56,36 +176,11 @@
                     <td id="total-sales">0 円</td>
                 </tr>
             </table>
-            <p></p>
-            <button type="submit">登録</button>
+
+            <div class="button-container">
+                <button type="submit">登録</button>
+            </div>
         </form>
-
     </div>
-
-    <script>
-        function calculateTotals() {
-            let totalQuantity = 0;
-            let totalSales = 0;
-
-            document.querySelectorAll(".quantity-input").forEach(input => {
-                let quantity = parseInt(input.value) || 0;
-                let price = parseInt(input.getAttribute("data-price"));
-
-                totalQuantity += quantity;
-                totalSales += quantity * price;
-            });
-
-            document.getElementById("total-quantity").textContent = totalQuantity;
-            document.getElementById("total-sales").textContent = totalSales + " 円";
-        }
-
-        document.querySelectorAll(".quantity-input").forEach(input => {
-            input.addEventListener("input", calculateTotals);
-        });
-    </script>
-
-
-
 </body>
-
 </html>
