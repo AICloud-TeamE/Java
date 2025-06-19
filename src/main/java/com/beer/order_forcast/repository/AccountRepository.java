@@ -10,3 +10,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     List<Account> findByIsDeletedFalse(); // 追加
 }
+
+
+

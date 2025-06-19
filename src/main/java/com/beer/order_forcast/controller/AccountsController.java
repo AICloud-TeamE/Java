@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -35,4 +39,35 @@ public class AccountsController {
             return "error";
         }
     }
+
+    //  // 編集ページ表示
+    // @GetMapping("/edit/{id}")
+    // public String editAccount(@PathVariable Long id, Model model) {
+    //     Optional<Account> account = accountRepository.findById(id);
+    //     if (account.isPresent()) {
+    //         model.addAttribute("account", account.get());
+    //         return "account-edit"; // account-edit.html に対応
+    //     } else {
+    //         return "redirect:/accounts";
+    //     }
+    // }
+
+    // // 編集処理（PUT受け取り）
+    // @PutMapping("/{id}")
+    // @ResponseBody
+    // public String updateAccount(@PathVariable Long id, @RequestBody Account updatedAccount) {
+    //     Optional<Account> accountOpt = accountRepository.findById(id);
+    //     if (accountOpt.isPresent()) {
+    //         Account account = accountOpt.get();
+    //         account.setUsername(updatedAccount.getUsername());
+    //         account.setEmail(updatedAccount.getEmail());
+    //         account.setRole(updatedAccount.getRole());
+    //         accountRepository.save(account);
+    //         return "OK";
+    //     } else {
+    //         return "NG";
+    //     }
+    // }
+
+
 }

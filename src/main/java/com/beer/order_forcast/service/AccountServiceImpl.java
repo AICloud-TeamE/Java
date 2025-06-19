@@ -34,6 +34,9 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
+ 
+
+
     // @Override
     // public Optional<Account> login(String email, String password){
     //   Optional<Account> aa = Optional.empty();
@@ -44,5 +47,17 @@ public class AccountServiceImpl implements AccountService {
     public Optional<Account> login(String email, String password){
         return accountRepository.findByEmailAndIsDeletedFalse(email)
             .filter(account -> account.getPassword().equals(password));
-}
+    }
+
+    // @Override
+    // public Account findById(Integer id) {
+    //     return accountRepository.findById(id).orElse(null);
+    // }
+
+    @Override
+    public Optional<Account> findById(Integer id) {
+    return accountRepository.findById(id);
+    }
+
+
 }

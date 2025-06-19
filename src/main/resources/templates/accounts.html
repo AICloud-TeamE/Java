@@ -91,8 +91,10 @@
                 <td th:text="${account.password}">yamadatarou</td>
                 <td th:text="${account.role == 'admin' ? '管理者' : '従業員'}">従業員</td>
                 <td>
-                    <button class="action-button" th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
-                    <button class="action-button" th:onclick="'location.href=\'/accounts/delete/' + ${account.id} + '\''">削除</button>
+                    <!-- <button class="action-button" th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button> -->
+                    <a class="action-button" th:href="@{'/accounts/edit/' + ${account.id}}">編集</a>
+                    <!-- <button class="action-button" th:onclick="'location.href=\'/accounts/delete/' + ${account.id} + '\''">削除</button> -->
+                    <button th:onclick="'location.href=\'/admin/delete/' + ${account.id} + '\''">削除</button>
                 </td>
             </tr>
         </tbody>
