@@ -3,41 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <title>需要予測</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* ===== 全体設定 ===== */
         body {
-            font-family: sans-serif;
+            background-color: white;
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 30px;
+            padding: 0;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* ===== ヘッダー ===== */
+        header {
+            background-color: #ffc107;
+            color: black;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
         }
 
-        .year-selector {
+        /* ===== サイドバー ===== */
+        aside {
+            background-color: #fff177;
+            padding: 20px;
+            width: 220px;
+            position: fixed;
+            left: 0;
+            height: 100%;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin-bottom: 15px;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            display: block;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        aside ul li a:hover {
+            background-color: #FFD54F;
+        }
+
+        /* ===== メインコンテンツエリア ===== */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* ===== 年表示 ===== */
+        .header-info {
+            text-align: center;
             font-size: 18px;
+            margin-bottom: 20px;
         }
 
+        /* ===== 発注日表示 ===== */
         .forecast-date {
+            text-align: center;
             font-size: 20px;
             font-weight: bold;
             margin: 20px 0;
         }
 
+        /* ===== 商品別予測本数 ===== */
         .product-forecast {
             display: flex;
             gap: 30px;
             font-weight: bold;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .product-forecast div {
             text-align: center;
         }
 
+        /* ===== テーブル ===== */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -53,81 +113,95 @@
         th {
             background-color: #f0f0f0;
         }
+
+        /* ===== ボタン（必要に応じて） ===== */
+        button {
+            background-color: #FFC107;
+            color: black;
+            padding: 8px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #FFA000;
+        }
     </style>
 </head>
 <body>
-    
-    <div th:if="${is_admin}">
-        <aside>
-            <ul>
-                <li><strong>メニュー</strong></li>
-                <li><a href="/forecast">需要予測</a></li>
-                <li><a href="/sales_input">需要実績入力</a></li>
-                <li><a href="/history_all">販売実績と天気</a></li>
-                <li><a href="/products">商品管理</a></li>
-                <li><a href="/accounts">アカウント管理</a></li>
-                <li><a href="/login">ログアウト</a></li>
-            </ul>
-        </aside>
-    </div>
 
-<div class="header">
+<header>発注予測システム</header>
+
+<div th:if="${is_admin}">
+    <aside>
+        <ul>
+            <li><strong>メニュー</strong></li>
+            <li><a href="/forecast">需要予測</a></li>
+            <li><a href="/sales_input">需要実績入力</a></li>
+            <li><a href="/history_all">販売実績と天気</a></li>
+            <li><a href="/products">商品管理</a></li>
+            <li><a href="/accounts">アカウント管理</a></li>
+            <li><a href="/login">ログアウト</a></li>
+        </ul>
+    </aside>
+</div>
+
+<div class="content">
     <h1>需要予測</h1>
-    <div class="year-selector" id="year-display"></div>
-</div>
+    <div class="header-info" id="year-display"></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const year = new Date().getFullYear();
-        document.getElementById('year-display').textContent = `${year}年`;
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const year = new Date().getFullYear();
+            document.getElementById('year-display').textContent = `${year}年`;
 
-        const forecastDateDiv = document.getElementById('forecast-date');
-        const today = new Date();
-        const dayOfWeek = today.getDay();
+            const forecastDateDiv = document.getElementById('forecast-date');
+            const today = new Date();
+            const dayOfWeek = today.getDay();
 
-        const forecastLabel = {
-            1: '火・水・木の需要予測',
-            4: '金・土・月の需要予測'
-        };
+            const forecastLabel = {
+                1: '火・水・木の需要予測',
+                4: '金・土・月の需要予測'
+            };
 
-        if (forecastLabel[dayOfWeek]) {
-            forecastDateDiv.textContent = forecastLabel[dayOfWeek];
-        } else {
-            forecastDateDiv.textContent = '';
-        }
-    });
-</script>
+            forecastDateDiv.textContent = forecastLabel[dayOfWeek] || '';
+        });
+    </script>
 
-<!-- 発注対象日の表示（条件付き） -->
-<div class="forecast-date" id="forecast-date"></div>
+    <!-- 発注対象日の表示 -->
+    <div class="forecast-date" id="forecast-date"></div>
 
-<!-- 商品別予測本数 -->
-<div class="product-forecast">
-    <div th:each="entry : ${predictedDemandMap}">
-        <span th:text="${entry.key}">ビール名</span><br>
-        <span th:text="${entry.value + '本'}">0本</span>
+    <!-- 商品別予測本数 -->
+    <div class="product-forecast">
+        <div th:each="entry : ${predictedDemandMap}">
+            <span th:text="${entry.key}">ビール名</span><br>
+            <span th:text="${entry.value + '本'}">0本</span>
+        </div>
     </div>
-</div>
 
-<!-- 次の5日間の天気予報と予測表示 -->
-<table>
-    <thead>
-        <tr>
-            <th>日付</th>
-            <th>天気予報</th>
-            <th>気温</th>
-            <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
-        </tr>
-    </thead>
-<tbody>
-    <tr th:each="forecast : ${sevenDayForecastList}">
-        <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
-        <td th:text="${forecast.weather}">晴れ</td>
-        <td th:text="${forecast.temperatureRange}">25〜30℃</td>
-        <td th:each="entry : ${forecast.predictedDemandMap}" th:text="${entry.value + '本'}">0本</td>
-    </tr>
-</tbody>
-</table>
+    <!-- 次の7日間の天気と予測 -->
+    <table>
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>天気予報</th>
+                <th>気温</th>
+                <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="forecast : ${sevenDayForecastList}">
+                <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
+                <td th:text="${forecast.weather}">晴れ</td>
+                <td th:text="${forecast.temperatureRange}">25〜30℃</td>
+                <td th:each="entry : ${forecast.predictedDemandMap}" th:text="${entry.value + '本'}">0本</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
