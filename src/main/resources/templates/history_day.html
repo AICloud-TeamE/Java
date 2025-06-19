@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>販売履歴（日別）</title>
+    <title>販売実績と天気（日ごと）</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* ===== 共通レイアウトスタイル（コード①から移植） ===== */
@@ -60,6 +60,12 @@
         }
 
         /* ===== コード②オリジナルスタイル（テーブルなど） ===== */
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
         table {
             width: 90%;
             margin: auto;
@@ -147,6 +153,9 @@
 </div>
 
 <div class="content">
+    <!-- ✅ タイトルを本文に表示 -->
+    <h1>販売実績と天気（日ごと）</h1>
+
     <div class="header-section">
         <div class="date-info">
             <span id="date"></span>（<span id="dayOfWeek"></span>）
