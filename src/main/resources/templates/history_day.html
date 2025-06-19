@@ -1,9 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>販売履歴（日別）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* ===== 共通レイアウトスタイル（コード①から移植） ===== */
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffc107;
+            color: black;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        aside {
+            background-color: #fff177;
+            padding: 20px;
+            width: 220px;
+            position: fixed;
+            left: 0;
+            height: 100%;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin-bottom: 15px;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            display: block;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        aside ul li a:hover {
+            background-color: #FFD54F;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        /* ===== コード②オリジナルスタイル（テーブルなど） ===== */
         table {
             width: 90%;
             margin: auto;
@@ -73,40 +129,44 @@
     </style>
 </head>
 <body>
- <div th:if="${is_admin}">
-        <aside>
-            <ul>
-                <li><strong>メニュー</strong></li>
-                <li><a href="/forecast">需要予測</a></li>
-                <li><a href="/sales_input">需要実績入力</a></li>
-                <li><a href="/history_all">販売実績と天気</a></li>
-                <li><a href="/products">商品管理</a></li>
-                <li><a href="/accounts">アカウント管理</a></li>
-                <li><a href="/login">ログアウト</a></li>
-            </ul>
-        </aside>
-    </div>
 
-<div class="header-section">
-    <div class="date-info">
-        <span id="date"></span>（<span id="dayOfWeek"></span>）
-    </div>
+<header>発注予測システム</header>
 
-    <div class="weather-info">
-        <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
-        <div>
-            <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
-            <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
+<div th:if="${is_admin}">
+    <aside>
+        <ul>
+            <li><strong>メニュー</strong></li>
+            <li><a href="/forecast">需要予測</a></li>
+            <li><a href="/sales_input">需要実績入力</a></li>
+            <li><a href="/history_all">販売実績と天気</a></li>
+            <li><a href="/products">商品管理</a></li>
+            <li><a href="/accounts">アカウント管理</a></li>
+            <li><a href="/login">ログアウト</a></li>
+        </ul>
+    </aside>
+</div>
+
+<div class="content">
+    <div class="header-section">
+        <div class="date-info">
+            <span id="date"></span>（<span id="dayOfWeek"></span>）
+        </div>
+
+        <div class="weather-info">
+            <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
+            <div>
+                <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
+                <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
+            </div>
+        </div>
+
+        <div class="editor-info">
+            編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span th:text="${model.editor}">--</span>
         </div>
     </div>
 
-    <div class="editor-info">
-        編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span th:text="${model.editor}">--</span>
-    </div>
-</div>
-
-<table>
-    <thead>
+    <table>
+        <thead>
         <tr>
             <th>商品名</th>
             <th>価格（円）</th>
@@ -114,35 +174,36 @@
             <th>売上（円）</th>
             <th>操作</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
             <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
-
-            <!-- 価格 -->
             <td>
                 <span th:text="${beer.price}"></span>
                 <input type="number" th:value="${beer.price}" style="display:none;">
             </td>
-
-            <!-- 数量 -->
             <td>
                 <span th:text="${beer.unit}"></span>
                 <input type="number" th:value="${beer.unit}" style="display:none;">
             </td>
-
-            <!-- 売上 -->
             <td>
                 <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
                 <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;">
             </td>
-            <!-- 操作 -->
             <td>
                 <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
             </td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <form id="editForm" method="post" action="/save">
+        <input type="hidden" name="name">
+        <input type="hidden" name="price">
+        <input type="hidden" name="unit">
+        <input type="hidden" name="revenue">
+    </form>
+</div>
 
 <script>
     // 日付と曜日を表示
@@ -151,49 +212,38 @@
     document.getElementById("dayOfWeek").textContent = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
 
     // 編集モード切り替え
-   function toggleEdit(button) {
-    const row = button.closest('tr');
-    const inputs = row.querySelectorAll('input');
-    const spans = row.querySelectorAll('span');
-    const isEditing = button.textContent === '保存';
+    function toggleEdit(button) {
+        const row = button.closest('tr');
+        const inputs = row.querySelectorAll('input');
+        const spans = row.querySelectorAll('span');
+        const isEditing = button.textContent === '保存';
 
-    inputs.forEach(input => input.style.display = isEditing ? 'none' : 'inline-block');
-    spans.forEach(span => span.style.display = isEditing ? 'inline' : 'none');
+        inputs.forEach(input => input.style.display = isEditing ? 'none' : 'inline-block');
+        spans.forEach(span => span.style.display = isEditing ? 'inline' : 'none');
 
-    if (isEditing) {
-        const price = parseInt(row.cells[1].querySelector('input').value) || 0;
-        const unit = parseInt(row.cells[2].querySelector('input').value) || 0;
-        const revenue = parseInt(row.cells[3].querySelector('input').value) || 0;
-        const name = row.querySelector('td[data-name]').getAttribute('data-name');
+        if (isEditing) {
+            const price = parseInt(row.cells[1].querySelector('input').value) || 0;
+            const unit = parseInt(row.cells[2].querySelector('input').value) || 0;
+            const revenue = parseInt(row.cells[3].querySelector('input').value) || 0;
+            const name = row.querySelector('td[data-name]').getAttribute('data-name');
 
-        // 表示用に更新
-        row.cells[1].querySelector('span').textContent = price;
-        row.cells[2].querySelector('span').textContent = unit;
-        row.cells[3].querySelector('span').textContent = revenue;
+            row.cells[1].querySelector('span').textContent = price;
+            row.cells[2].querySelector('span').textContent = unit;
+            row.cells[3].querySelector('span').textContent = revenue;
 
-        // フォームに値を設定して送信
-        const form = document.getElementById('editForm');
-        form.elements['name'].value = name;
-        form.elements['price'].value = price;
-        form.elements['unit'].value = unit;
-        form.elements['revenue'].value = revenue;
+            const form = document.getElementById('editForm');
+            form.elements['name'].value = name;
+            form.elements['price'].value = price;
+            form.elements['unit'].value = unit;
+            form.elements['revenue'].value = revenue;
 
-        form.submit(); // 🔁 ここで /save にPOST遷移
-
-        button.textContent = '編集';
-    } else {
-        button.textContent = '保存';
+            form.submit();
+            button.textContent = '編集';
+        } else {
+            button.textContent = '保存';
+        }
     }
-}
-
 </script>
-
-        <form id="editForm" method="post" action="/save">
-           <input type="hidden" name="name">
-            <input type="hidden" name="price">
-            <input type="hidden" name="unit">
-            <input type="hidden" name="revenue">
-        </form>
 
 </body>
 </html>
