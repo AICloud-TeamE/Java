@@ -158,6 +158,7 @@
         <button>Filter</button>
     </div>
 
+
     <table>
         <thead>
             <tr>
@@ -175,6 +176,8 @@
                 <td th:text="${account.password}">password</td>
                 <td th:text="${account.isAdmin} ? '管理者' : '従業員'">従業員</td>
                 <td>
+
+
                     <button class="action-button"
                             th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
 
