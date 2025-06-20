@@ -60,6 +60,7 @@ public class ProductsController {
 
         //attribute?done, need test
         model.addAttribute("productList",productService.findAll());
+
         return "products";
     }
 

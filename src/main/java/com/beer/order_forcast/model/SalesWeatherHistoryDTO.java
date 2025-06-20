@@ -8,16 +8,20 @@ public class SalesWeatherHistoryDTO {
     private Float highestTemperature;
     private Float lowestTemperature;
     private Integer totalSales;
+
     private String dayOfWeek;
 
     public SalesWeatherHistoryDTO(LocalDate date, String weather, Float highestTemperature,
             Float lowestTemperature, Integer totalSales,String dayOfWeek) {
+
         this.date = date;
         this.weather = weather;
         this.highestTemperature = highestTemperature;
         this.lowestTemperature = lowestTemperature;
         this.totalSales = totalSales;
+
         this.dayOfWeek = dayOfWeek;
+
     }
 
     public LocalDate getDate() {
@@ -31,6 +35,7 @@ public class SalesWeatherHistoryDTO {
     public String getDayOfWeek() {
         return dayOfWeek;
     }
+
 
     public Float getHighestTemperature() {
         return highestTemperature;

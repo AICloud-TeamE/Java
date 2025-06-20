@@ -37,6 +37,8 @@ public class LoginController {
             Account account = accountService.getAccountByEmail(userId);
             session.setAttribute("userId", account.getId());
             session.setAttribute("isAdmin", account.isAdmin());
+
+
             model.addAttribute("isAdmin", account.isAdmin());
             System.out.println("管理者として");
             return "redirect:/history_all";
@@ -47,6 +49,7 @@ public class LoginController {
             model.addAttribute("isAdmin", account.isAdmin());
             System.out.println("一般ユーザーとして");
             return "redirect:/sales_input";
+
         } else {
             model.addAttribute("error", "不明なエラーが発生しました。");
             return "login";

@@ -221,7 +221,9 @@
             <ul>
                 <li><strong>メニュー</strong></li>
                 <li><a href="/forecast">需要予測</a></li>
-                <li><a href="/sales_input">需要実績入力</a></li>
+
+                <li><a href="/sales_input">販売実績入力</a></li>
+
                 <li><a href="/history_all">すべての販売実績と天気</a></li>
                 <li><a href="/history_week">週ごとの販売実績と天気</a></li>
                 <li><a href="/products">商品管理</a></li>
@@ -231,10 +233,12 @@
         </aside>
     </div>
 
-    <div class="content">
+
+    <div class="content"> 
         <h1>天気と売上カレンダー</h1>
 
-        <form method="get" action="/home">
+        <form method="get" action="/history_all">
+
             <label for="year">年:</label>
             <select id="year" name="year">
                 <option th:each="y : ${years}" th:value="${y}" th:text="${y}" th:selected="${y == selectedYear}">
@@ -251,12 +255,27 @@
         </form>
 
         <div class="calendar">
+
+            <!-- 曜日ヘッダ -->
+
             <div class="header">月</div>
             <div class="header">火</div>
             <div class="header">水</div>
             <div class="header">木</div>
             <div class="header">金</div>
             <div class="header">土</div>
+
+
+            <!-- 空白セルの挿入 -->
+            <th:block th:with="dowMap=${{'月': 0, '火': 1, '水': 2, '木': 3, '金': 4, '土': 5}}">
+                <th:block th:if="${historyList.size() > 0}">
+                    <th:block th:each="i : ${#numbers.sequence(0, dowMap[historyList[0].weekOfDay] - 1)}">
+                        <div class="day"></div>
+                    </th:block>
+                </th:block>
+            </th:block>
+
+            <!-- 実データの出力 -->
 
             <th:block th:each="history : ${historyList}">
                 <div class="day">
