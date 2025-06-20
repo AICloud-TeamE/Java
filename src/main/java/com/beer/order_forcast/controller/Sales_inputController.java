@@ -145,6 +145,8 @@ public class Sales_inputController {
         model.addAttribute("is_admin", isAdmin);
 
         return "registration_result";
+        // return "redirect:/history_all";
+
     }
 
 }
