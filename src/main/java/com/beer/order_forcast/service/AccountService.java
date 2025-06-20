@@ -62,4 +62,9 @@ public class AccountService {
     public Optional<Account> findById(Integer id) {
         return accountRepository.findById(id);
     }
+
+    public boolean existsByEmail(String email) {
+        return accountRepository.findByEmailAndIsDeletedFalse(email).isPresent();
+}
+
 }

@@ -56,6 +56,13 @@ public class AccountAdminController {
             return "error";
         }
 
+          // すでに同じメールが存在するかチェック
+        if (accountService.existsByEmail(email)) {
+            model.addAttribute("emailError", "このメールアドレスは既に使用されています。");
+            model.addAttribute("account", new Account()); // フォーム再表示のため
+            return "account_add";
+        }
+
         Account account = new Account();
         account.setName(username);
         account.setEmail(email);
