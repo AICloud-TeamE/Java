@@ -17,26 +17,27 @@ public class FunctionTestController {
 
         String functionUrl = "";
 
+
         //request body
-        // Map<String, String> request = new HashMap<>();
-        // request.put("date", "2025-06-18");
+        Map<String, String> request = new HashMap<>();
+        request.put("date", "2025-06-20");
 
-        // //header
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.setContentType(MediaType.APPLICATION_JSON);
+        //header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // //request作成
-        // HttpEntity<Map<String, String>> entity = new HttpEntity<>(request, headers);
+        //request作成
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(request, headers);
 
         //
         RestTemplate restTemplate = new RestTemplate();
-        // ResponseEntity<String> response = restTemplate.exchange(
-        //         functionUrl,
-        //         HttpMethod.POST,
-        //         entity,
-        //         String.class
-        // );
-        String response = restTemplate.getForObject(functionUrl, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(
+                functionUrl,
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+        // String response = restTemplate.getForObject(functionUrl, String.class);
 
         return response; // 打印对方返回的数据
     }
