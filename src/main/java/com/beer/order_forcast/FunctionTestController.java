@@ -11,7 +11,10 @@ import java.util.Map;
 public class FunctionTestController {
 
     @GetMapping("/test-function")
-    public String callAzureFunction() {
+
+
+    public ResponseEntity<String> callAzureFunction() {
+
         String functionUrl = "";
 
         //request body
