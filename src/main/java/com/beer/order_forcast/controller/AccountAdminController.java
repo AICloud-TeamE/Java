@@ -37,7 +37,7 @@ public class AccountAdminController {
     }
 
     @PostMapping("/accounts/success")
-    public String addAccount(@RequestParam String username,
+    public String addAccount(@RequestParam String name,
                              @RequestParam String email,
                              @RequestParam String password,
                              @RequestParam String role,
@@ -50,7 +50,7 @@ public class AccountAdminController {
         }
 
         Account account = new Account();
-        account.setName(username);
+        account.setName(name);
         account.setEmail(email);
         account.setPassword(password);
         account.setAdmin(role.equals("admin"));
@@ -94,7 +94,7 @@ public class AccountAdminController {
 
     @PostMapping("/accounts/update/{id}")
     public String updateAccount(@PathVariable Integer id,
-                                @RequestParam String username,
+                                @RequestParam String name,
                                 @RequestParam String email,
                                 @RequestParam String role,
                                 HttpSession session,
@@ -112,7 +112,7 @@ public class AccountAdminController {
         }
 
         Account account = optionalAccount.get();
-        account.setName(username);
+        account.setName(name);
         account.setEmail(email);
         account.setAdmin("管理者".equals(role));
 

@@ -57,7 +57,7 @@
 <!-- id は動的にセットされるように -->
 <!-- <form method="POST" th:action="@{/accounts/{id}(id=${account.id})}" onsubmit="event.preventDefault(); updateAccount();"> -->
     <!-- <form method="POST" th:action="@{/accounts/update/{id}(id=${account.id})}"> -->
-    <form method="POST" th:action="@{/accounts/update/{id}(id=${account.id})}">
+<form method="POST" th:action="@{/accounts/update/{id}(id=${account.id})}">
     <input type="hidden" name="_method" value="PUT" />
     
     <table>
@@ -67,7 +67,7 @@
         <tbody>
             <tr>
                 <td>氏名</td>
-                <td><input type="text" name="username" th:value="${account.name}" required></td>
+                <td><input type="text" name="name" th:value="${account.name}" required></td>
             </tr>
             <tr>
                 <td>メールアドレス</td>
@@ -98,7 +98,7 @@
         const form = document.querySelector("form");
         const formData = new FormData(form);
         const data = {
-            username: formData.get("username"),
+            name: formData.get("name"),
             email: formData.get("email"),
             role: formData.get("role")
         };
