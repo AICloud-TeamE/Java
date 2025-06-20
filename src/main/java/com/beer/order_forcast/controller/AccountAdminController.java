@@ -56,6 +56,40 @@ public class AccountAdminController {
             return "error";
         }
 
+          // すでに同じメールが存在するかチェック
+        // if (accountService.existsByEmail(email)) {
+        //     model.addAttribute("emailError", "このメールアドレスは既に使用されています。");
+        //     model.addAttribute("account", new Account()); // フォーム再表示のため
+        //     return "account_add";
+        // }
+          boolean hasError = false;
+
+        // メールアドレス重複チェック
+        if (accountService.existsByEmail(email)) {
+            model.addAttribute("emailExistsError", true);
+            hasError = true;
+         }
+
+        // パスワードの長さチェック
+        if (password.length() < 8) {
+            model.addAttribute("passwordError", true);
+            hasError = true;
+         }
+         
+         if (hasError) {
+        // 入力済み情報を保持して戻る
+        Account account = new Account();
+        account.setName(username);
+        account.setEmail(email);
+        account.setPassword(password);
+        account.setAdmin("admin".equals(role));
+        model.addAttribute("account", account);
+        return "account_add";
+         }
+ 
+        
+        // 登録処理 
+
         Account account = new Account();
         account.setName(username);
         account.setEmail(email);

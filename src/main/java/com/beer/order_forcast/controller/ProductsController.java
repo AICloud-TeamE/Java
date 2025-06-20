@@ -58,7 +58,9 @@ public class ProductsController {
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
 
-        productService.findAll();
+        //attribute?done, need test
+        model.addAttribute("productList",productService.findAll());
+
         return "products";
     }
 

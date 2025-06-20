@@ -1,16 +1,24 @@
-<!DOCTYPE html> 
+
+<!DOCTYPE html>
+
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>アカウント編集</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+
+        /* ===== 全体設定 ===== */
+
         body {
             background-color: white;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
+
+
+        /* ===== ヘッダー ===== */
 
         header {
             background-color: #ffc107;
@@ -20,6 +28,9 @@
             text-align: center;
             font-weight: bold;
         }
+
+
+        /* ===== サイドバー ===== */
 
         aside {
             background-color: #fff177;
@@ -52,6 +63,9 @@
         aside ul li a:hover {
             background-color: #FFD54F;
         }
+
+
+        /* ===== メインコンテンツエリア ===== */
 
         .content {
             margin-left: 250px;
@@ -123,6 +137,7 @@
             background-color: #f0f0f0;
         }
 
+
         /* ▼ エラーメッセージ用スタイル */
         .error-message {
             color: red;
@@ -130,6 +145,7 @@
             text-align: center;
             margin-bottom: 15px;
         }
+
     </style>
 </head>
 <body>
@@ -141,7 +157,9 @@
         <ul>
             <li><strong>メニュー</strong></li>
             <li><a href="/forecast">需要予測</a></li>
+
             <li><a href="/sales_input">販売実績入力</a></li>
+
             <li><a href="/history_all">すべての販売実績と天気</a></li>
             <li><a href="/history_week">週ごとの販売実績と天気</a></li>
             <li><a href="/products">商品管理</a></li>
@@ -178,6 +196,7 @@
                 </tr>
             </tbody>
         </table>
+
 
         <!-- ▼ エラーメッセージ表示 -->
         <div th:if="${emailExistsError}" class="error-message">

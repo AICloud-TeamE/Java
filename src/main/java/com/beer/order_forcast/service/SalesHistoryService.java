@@ -6,6 +6,8 @@ import com.beer.order_forcast.model.*;
 import org.springframework.stereotype.Service;
 import com.beer.order_forcast.repository.*;
 
+import java.time.DayOfWeek;
+
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,6 +61,15 @@ public class SalesHistoryService {
                 weatherName = optionalWeather.get().getWeather();
             }
 
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+            String weekdayName = getJapaneseShortWeekday(dayOfWeek);
+            int weekdayNumber = dayOfWeek.getValue();
+
+            if (weekdayNumber == 7){
+                break;
+            }
+
+
             // 累加该日所有销售额
             int totalSales = 0;
             for (SalesHistory sh : salesHistories) {
@@ -73,14 +84,39 @@ public class SalesHistoryService {
                     weatherName,
                     maxTemp,
                     minTemp,
-                    totalSales);
+
+                    totalSales,
+                    weekdayName);
+
 
             dtoList.add(dto);
         }
 
         return dtoList;
 
-        
+
+    }
+
+    // 👆上に呼び出されます
+    public String getJapaneseShortWeekday(DayOfWeek dow) {
+        switch (dow) {
+            case MONDAY:
+                return "月";
+            case TUESDAY:
+                return "火";
+            case WEDNESDAY:
+                return "水";
+            case THURSDAY:
+                return "木";
+            case FRIDAY:
+                return "金";
+            case SATURDAY:
+                return "土";
+            case SUNDAY:
+                return "日";
+            default:
+                return "";
+        }
 
     }
 

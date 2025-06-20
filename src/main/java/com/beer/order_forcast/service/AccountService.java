@@ -50,7 +50,12 @@ public class AccountService {
             return 2; // 密码错误
         }
 
-        return 0; // 登录成功
+        if (account.isAdmin()){
+            return 0;//登录成功-管理者
+        }
+
+        return 4; // 登录成功-一般ユーザー
+
     }
 
     // 登录成功时取出用户详细信息用
@@ -62,4 +67,10 @@ public class AccountService {
     public Optional<Account> findById(Integer id) {
         return accountRepository.findById(id);
     }
+
+    public boolean existsByEmail(String email) {
+        return accountRepository.findByEmailAndIsDeletedFalse(email).isPresent();
+}
+
+
 }
