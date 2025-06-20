@@ -59,7 +59,7 @@ public class History_allController {
 
         // model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
-        model.addAttribute("is_admin", isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
 
         // by defaultで当日の日付代入
         if (year == null)
@@ -74,28 +74,13 @@ public class History_allController {
 
 
         
-        // mock传参，后面要用正式的！！
-        List<Map<String, Object>> historyList = new ArrayList<>();
-        historyList.add(Map.of(
-                "day", "月",
-                "date", "6月10日",
-                "weather", "sunny",
-                "highestTemperature", 31.5,
-                "lowestTemperature", 25.8,
-                "totalSales", 45000));
-        historyList.add(Map.of(
-                "day", "火",
-                "date", "6月11日",
-                "weather", "cloudy",
-                "highestTemperature", 28.0,
-                "lowestTemperature", 23.5,
-                "totalSales", 38000));
 
-        // //真实参数取得，需修改数据库！！！！
-        // List<SalesHistory> salesHistoryList = salesHistoryService.findAll();
-        // // 或按年月筛选的结果
-        // //需补充
-        // model.addAttribute("historyList", salesHistoryList);
+        //真实参数取得，需修改数据库！！！！
+        List<SalesHistory> salesHistoryList = salesHistoryService.findAll();
+        // 或按年月筛选的结果
+
+        //需补充
+        model.addAttribute("historyList", salesHistoryService.getSalesWeatherByMonth(year,month));
 
         return "home";
 

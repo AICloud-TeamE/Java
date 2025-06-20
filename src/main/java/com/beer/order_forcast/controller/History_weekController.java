@@ -60,7 +60,7 @@ public class History_weekController {
 
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
-        model.addAttribute("is_admin", isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
 
         // mock传参，后面要用正式的！！
         List<Map<String, Object>> historyList = new ArrayList<>();

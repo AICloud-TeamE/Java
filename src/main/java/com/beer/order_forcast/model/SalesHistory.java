@@ -2,7 +2,8 @@ package com.beer.order_forcast.model;
 
 import jakarta.persistence.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
+
 import java.time.*;
 
 
@@ -14,31 +15,31 @@ public class SalesHistory {
     private Integer id;
 
     @Column(name = "product_id")
-    private Integer product_id;
+    private Integer productId;
 
     @Column(name = "creator_id")
-    private Integer creator_id;
+    private Integer creatorId;
 
     @Column(name = "update_id")
-    private Integer update_id;
+    private Integer updateId;
 
     @Column(name = "date")
     private LocalDate date;
 
     @Column(name = "weather_history_id")
-    private Integer weather_history_id;
+    private Integer weatherHistoryId;
 
     @Column(name = "sales_count")
-    private Integer sales_count;
+    private Integer salesCount;
 
     @Column(name = "sales_revenue")
-    private Integer sales_revenue;
+    private Integer salesRevenue;
 
     @Column(name = "created_at")
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private Timestamp updated_at;
+    private Timestamp updatedAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -48,15 +49,15 @@ public class SalesHistory {
     }
 
     public Integer getProduct_id() {
-        return product_id;
+        return productId;
     }
 
     public Integer getCreator_id() {
-        return creator_id;
+        return creatorId;
     }
 
     public Integer getUpdate_id() {
-        return update_id;
+        return updateId;
     }
 
     public LocalDate getDate() {
@@ -64,23 +65,23 @@ public class SalesHistory {
     }
 
     public Integer getWeather_history_id() {
-        return weather_history_id;
+        return weatherHistoryId;
     }
 
     public Integer getSales_count() {
-        return sales_count;
+        return salesCount;
     }
 
     public Integer getSales_revenue() {
-        return sales_revenue;
+        return salesRevenue;
     }
 
     public Timestamp getCreated_at() {
-        return created_at;
+        return createdAt;
     }
 
     public Timestamp getUpdated_at() {
-        return updated_at;
+        return updatedAt;
     }
 
     public Boolean getIs_deleted() {
@@ -92,15 +93,15 @@ public class SalesHistory {
     }
 
     public void setProduct_id(Integer product_id) {
-        this.product_id = product_id;
+        this.productId = product_id;
     }
 
     public void setCreator_id(Integer creator_id) {
-        this.creator_id = creator_id;
+        this.creatorId = creator_id;
     }
 
     public void setUpdate_id(Integer update_id) {
-        this.update_id = update_id;
+        this.updateId = update_id;
     }
 
     public void setDate(LocalDate date) {
@@ -108,23 +109,23 @@ public class SalesHistory {
     }
 
     public void setWeather_history_id(Integer weather_history_id) {
-        this.weather_history_id = weather_history_id;
+        this.weatherHistoryId = weather_history_id;
     }
 
     public void setSales_count(Integer sales_count) {
-        this.sales_count = sales_count;
+        this.salesCount = sales_count;
     }
 
     public void setSales_revenue(Integer sales_revenue) {
-        this.sales_revenue = sales_revenue;
+        this.salesRevenue = sales_revenue;
     }
 
     public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+        this.createdAt = created_at;
     }
 
     public void setUpdated_at(Timestamp updated_at) {
-        this.updated_at = updated_at;
+        this.updatedAt = updated_at;
     }
 
     public void setIs_deleted(Boolean is_deleted) {

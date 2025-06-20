@@ -53,7 +53,7 @@ public class ForecastController {
         System.out.println("controller導入検査");
     }
 
-    @GetMapping("/demand-forecast")
+    @GetMapping("/forecast")
     public String showForecastPage(HttpSession session,
             Model model) {
 
@@ -111,15 +111,15 @@ public class ForecastController {
 
     
     // 之后再说分界线！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-    @GetMapping("/forecast")
-    public String getForecast(HttpSession session) {
-        String email = session.getAttribute("email").toString();
-        LocalDate date = LocalDate.now();
-        // 向python请求
-        // List<Integer> forecast_list = xxxx(date);
-        List<Integer> forecast_list = new ArrayList<>();
-        // Integer sales_sum = forecast_service.forecast_sum(forecast_list);
-        return "forecast";
-    }
+    // @GetMapping("/forecast")
+    // public String getForecast(HttpSession session) {
+    //     String email = session.getAttribute("email").toString();
+    //     LocalDate date = LocalDate.now();
+    //     // 向python请求
+    //     // List<Integer> forecast_list = xxxx(date);
+    //     List<Integer> forecast_list = new ArrayList<>();
+    //     // Integer sales_sum = forecast_service.forecast_sum(forecast_list);
+    //     return "forecast";
+    // }
     // 之后再说分界线！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 }

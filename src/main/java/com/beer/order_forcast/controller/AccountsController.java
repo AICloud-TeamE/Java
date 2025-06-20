@@ -20,25 +20,25 @@ public class AccountsController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/home")
-    public String home(HttpSession session, Model model) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+    // @GetMapping("/home")
+    // public String home(HttpSession session, Model model) {
+    //     Integer userId = (Integer) session.getAttribute("userId");
+    //     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
-        if (userId == null || isAdmin == null) {
-            model.addAttribute("error", "ログイン情報が不正です。");
-            return "error";
-        }
+    //     if (userId == null || isAdmin == null) {
+    //         model.addAttribute("error", "ログイン情報が不正です。");
+    //         return "error";
+    //     }
 
-        if (isAdmin) {
-            List<Account> accounts = accountService.getAllActiveAccounts();
-            model.addAttribute("accounts", accounts);
-            return "accounts";  // ← ✅ 遷移先を accounts.html に変更
-        } else {
-            model.addAttribute("message", "一般ユーザーはアクセスできません。");
-            return "error";
-        }
-    }
+    //     if (isAdmin) {
+    //         List<Account> accounts = accountService.getAllActiveAccounts();
+    //         model.addAttribute("accounts", accounts);
+    //         return "home";  // ← ✅ 遷移先を accounts.html に変更
+    //     } else {
+    //         model.addAttribute("message", "一般ユーザーはアクセスできません。");
+    //         return "error";
+    //     }
+    // }
 
     //  // 編集ページ表示
     // @GetMapping("/edit/{id}")

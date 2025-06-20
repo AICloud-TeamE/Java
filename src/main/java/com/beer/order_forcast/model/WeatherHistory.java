@@ -12,16 +12,16 @@ public class WeatherHistory {
     private Integer id;
 
     @Column(name = "weather_id")
-    private Integer weather_id;
+    private Integer weatherId;
 
     @Column(name = "date")
     private LocalDate date;
 
     @Column(name = "highest_temperature")
-    private Float highest_temperature;
+    private Float highestTemperature;
 
     @Column(name = "lowest_temperature")
-    private Float lowest_temperature;
+    private Float lowestTemperature;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -35,11 +35,11 @@ public class WeatherHistory {
     }
 
     public Integer getWeather_id() {
-        return weather_id;
+        return weatherId;
     }
 
     public void setWeather_id(Integer weather_id) {
-        this.weather_id = weather_id;
+        this.weatherId = weather_id;
     }
 
     public LocalDate getDate() {
@@ -51,19 +51,19 @@ public class WeatherHistory {
     }
 
     public Float getHighest_temperature() {
-        return highest_temperature;
+        return highestTemperature;
     }
 
     public void setHighest_temperature(Float highest_temperature) {
-        this.highest_temperature = highest_temperature;
+        this.highestTemperature = highest_temperature;
     }
 
     public Float getLowest_temperature() {
-        return lowest_temperature;
+        return lowestTemperature;
     }
 
     public void setLowest_temperature(Float lowest_temperature) {
-        this.lowest_temperature = lowest_temperature;
+        this.lowestTemperature = lowest_temperature;
     }
 
     public Boolean getIs_deleted() {
