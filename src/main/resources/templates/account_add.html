@@ -2,11 +2,10 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>アカウント追加</title>
   <style>
-    /* ===== 全体設定 ===== */
     body {
       background-color: white;
       font-family: Arial, sans-serif;
@@ -14,7 +13,6 @@
       padding: 0;
     }
 
-    /* ===== ヘッダー ===== */
     header {
       background-color: #ffc107;
       color: black;
@@ -24,7 +22,6 @@
       font-weight: bold;
     }
 
-    /* ===== サイドバー ===== */
     aside {
       background-color: #fff177;
       padding: 20px;
@@ -54,10 +51,9 @@
     }
 
     aside ul li a:hover {
-      background-color: #FFD54F;
+      background-color: #ffd54f;
     }
 
-    /* ===== メインコンテンツエリア ===== */
     .content {
       margin-left: 250px;
       padding: 20px;
@@ -66,12 +62,14 @@
     h2 {
       margin-bottom: 20px;
       color: #333;
+      text-align: center; /* タイトル中央寄せ */
     }
 
     table {
       border-collapse: collapse;
       width: 500px;
       max-width: 100%;
+      margin: 0 auto;
     }
 
     th,
@@ -97,13 +95,14 @@
 
     .buttons {
       margin-top: 20px;
+      text-align: center; /* ボタン中央寄せ */
     }
 
     .buttons button {
       padding: 10px 20px;
-      margin-right: 10px;
+      margin: 0 10px; /* ボタン間の余白 */
       font-size: 16px;
-      background-color: #FFC107;
+      background-color: #ffc107;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -111,7 +110,16 @@
     }
 
     .buttons button:hover {
-      background-color: #FFA000;
+      background-color: #ffa000;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin: 10px auto;
+      width: 500px;
+      max-width: 100%;
+      text-align: center;
     }
   </style>
 </head>
@@ -136,24 +144,22 @@
 
   <div class="content">
     <h2>アカウント追加</h2>
-      <!-- 同じメールアドレスを作った時に、エラーメッセージを表示する -->
-      <div th:if="${emailError}" style="color:red; margin-bottom:10px;">
-         <p th:text="${emailError}"></p>
-      </div>
+      
+   
 
     <form action="/accounts/success" method="POST" onsubmit="return validateForm()">
       <table>
         <tr>
           <th>氏名</th>
-          <td><input type="text" name="username" required></td>
+          <td><input type="text" name="username" required /></td>
         </tr>
         <tr>
           <th>メールアドレス</th>
-          <td><input type="email" name="email" required></td>
+          <td><input type="email" name="email" required /></td>
         </tr>
         <tr>
           <th>パスワード</th>
-          <td><input type="password" name="password" minlength="8" required></td>
+          <td><input type="password" name="password" minlength="8" required /></td>
         </tr>
         <tr>
           <th>権限</th>
@@ -165,8 +171,16 @@
           </td>
         </tr>
       </table>
+
+      <div th:if="${emailExistsError}" class="error-message">
+        入力されたメールアドレスは既に使用されています。
+      </div>
+      <div th:if="${passwordError}" class="error-message">
+        パスワードは8文字以上で入力してください。
+      </div>
+
       <div class="buttons">
-        <button type="submit">アカウント追加</button>
+        <button type="submit">登録</button>
         <button type="button" onclick="window.history.back();">キャンセル</button>
       </div>
     </form>
@@ -176,14 +190,17 @@
     function validateForm() {
       const email = document.querySelector('[name=email]').value;
       const password = document.querySelector('[name=password]').value;
+
       if (!email.includes('@')) {
         alert('有効なメールアドレスを入力してください。');
         return false;
       }
+
       if (password.length < 8) {
         alert('パスワードは8文字以上で入力してください。');
         return false;
       }
+
       return true;
     }
   </script>
