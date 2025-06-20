@@ -21,19 +21,29 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String userId,
-                        @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
+            @RequestParam String password,
+            HttpSession session,
+            Model model) {
 
-        return accountService.login(userId, password)
-                .map(account -> {
-                    session.setAttribute("userId", account.getId());
-                    session.setAttribute("isAdmin", account.isAdmin());
-                    return "redirect:/home";
-                })
-                .orElseGet(() -> {
-                    model.addAttribute("error", "メールアドレスまたはパスワードが違います。");
-                    return "login";
-                });
+        int result = accountService.login(userId, password);
+        if (result == 1) {
+            model.addAttribute("error", "メールアドレスが存在しません。");
+            return "login";
+        } else if (result == 2) {
+            model.addAttribute("error", "パスワードが間違っています。");
+            return "login";
+        } else if (result == 0) {
+            // ここで Account を取得して session に保存する（非常に重要）
+            Account account = accountService.getAccountByEmail(userId);
+            session.setAttribute("userId", account.getId());
+            session.setAttribute("isAdmin", account.isAdmin());
+            model.addAttribute("isAdmin",account.isAdmin());
+
+            return "redirect:/history_all";
+        } else {
+            model.addAttribute("error", "不明なエラーが発生しました。");
+            return "login";
+        }
+
     }
 }

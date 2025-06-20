@@ -3,6 +3,7 @@ package com.beer.order_forcast.service;
 import org.springframework.stereotype.Service;
 
 import com.beer.order_forcast.model.Product;
+import com.beer.order_forcast.model.SalesHistory;
 import com.beer.order_forcast.repository.*;
 import java.util.*;
 
@@ -12,6 +13,10 @@ public class ProductService {
 
     public ProductService(ProductRepository repository) {
         this.repository = repository;
+    }
+
+    public List<Product> findAll() {
+        return repository.findAll();
     }
 
     // gpt生成的整理model返回前端需要的map
@@ -34,8 +39,7 @@ public class ProductService {
         return productPriceMap;
     }
 
-
-    //崩溃 这是啥时候写的 哪用了？？？？？
+    // 崩溃 这是啥时候写的 哪用了？？？？？
     public Map<String, Integer> getValidProductMap() {
         List<Product> products = repository.findByIsDeletedFalse();
         Map<String, Integer> map = new HashMap<>();
@@ -45,10 +49,19 @@ public class ProductService {
         return map;
     }
 
+    // ProductService.java
+    public List<Product> findAllActiveProducts() {
+        return repository.findByIsDeletedFalse();
+    }
+
     //
     public Integer forecast_sum(List<Integer> list) {
 
         return 0;
+    }
+
+    public Integer findPriceByProductId(Integer id) {
+        return repository.findPriceByProductId(id);
     }
 
 }

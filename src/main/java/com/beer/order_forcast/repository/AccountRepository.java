@@ -6,7 +6,9 @@ import java.util.Optional;
 import java.util.List;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
+    
     Optional<Account> findByEmailAndIsDeletedFalse(String email);
+    Optional<Account> findByEmail(String email);
 
     List<Account> findByIsDeletedFalse(); // 追加
 }

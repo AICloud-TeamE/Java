@@ -1,30 +1,32 @@
 package com.beer.order_forcast.controller;
 
-//other created packages
-import com.beer.order_forcast.model.*;
-import com.beer.order_forcast.repository.*;
-import com.beer.order_forcast.service.*;
-
+import java.sql.Timestamp;
 //function package
-import java.time.*;
-import java.util.*;
-
-//servlet package
-import jakarta.servlet.http.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 //springboot package
 // 控制器类注解
 import org.springframework.stereotype.Controller;
-
 // 向 HTML 页面传值
 import org.springframework.ui.Model;
-
 // Web 请求映射和参数绑定相关
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 //redirect
-import org.springframework.web.servlet.mvc.support.*;
-import org.thymeleaf.expression.Lists;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+//other created packages
+import com.beer.order_forcast.model.SalesHistory;
+import com.beer.order_forcast.service.ProductService;
+import com.beer.order_forcast.service.SalesHistoryService;
+import com.beer.order_forcast.service.WeatherHistoryService;
+import com.beer.order_forcast.service.WeatherService;
+
+//servlet package
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class Sales_inputController {
@@ -59,33 +61,72 @@ public class Sales_inputController {
 
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
-        model.addAttribute("is_admin", isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
 
-        model.addAttribute("bearDictionary", productService.getActiveProductPriceMap());
-
+        model.addAttribute("beerList", productService.findAllActiveProducts());
         return "sales_input";
     }
 
     @PostMapping("/sales_input")
     public String handleSalesInput(
-            @RequestParam Map<String, String> salesMap,
-            RedirectAttributes redirectAttributes) {
+            // @RequestParam Map<String, String> salesMap,
+            @RequestParam Map<String, String> form,
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
 
-        Map<String, Integer> productMap = productService.getValidProductMap(); // 商品名 -> 単価
+        Integer userId = (Integer) session.getAttribute("userId");
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
-        for (String productName : productMap.keySet()) {
-            String quantityStr = salesMap.get(productName);
-            if (quantityStr == null || quantityStr.isBlank()) {
-                //error message需要前端加显示
-                redirectAttributes.addFlashAttribute("error", "すべての商品に販売数を入力してください。");
-                return "redirect:/sales_input";
+        // Map<String, Integer> productMap = productService.getValidProductMap(); // 商品名
+        // -> 単価
+
+        // for (String productName : productMap.keySet()) {
+        // String quantityStr = salesMap.get(productName);
+        // if (quantityStr == null || quantityStr.isBlank()) {
+        // // error message需要前端加显示
+        // redirectAttributes.addFlashAttribute("error", "すべての商品に販売数を入力してください。");
+        // return "redirect:/sales_input";
+        // }
+        // }
+        
+
+        LocalDate today = LocalDate.now();
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+
+        for (Map.Entry<String, String> entry : form.entrySet()) {
+            String key = entry.getKey(); // e.g., input1, input2
+            if (key.startsWith("input")) {
+                try {
+                    Integer productId = Integer.parseInt(key.substring(5)); // 截掉 "input"
+                    Integer count = Integer.parseInt(entry.getValue());
+                    if (count <= 0)
+                        continue;
+
+                    Integer price = productService.findPriceByProductId(productId);
+                    Integer revenue = count * price;
+
+                    SalesHistory sh = new SalesHistory();
+                    sh.setProduct_id(productId);
+                    sh.setCreator_id(userId);
+                    sh.setUpdate_id(userId);
+                    sh.setDate(today);
+                    sh.setSales_count(count);
+                    sh.setSales_revenue(revenue);
+                    sh.setCreated_at(now);
+                    sh.setUpdated_at(now);
+                    sh.setIs_deleted(false);
+
+                    salesHistoryService.save(sh);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
         // 成功时跳转到确认页（后续可以在confirm页面中显示“登録成功”）
         return "redirect:/confirm";
 
-        
     }
 
     @GetMapping("/confirm")
@@ -102,8 +143,6 @@ public class Sales_inputController {
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
         model.addAttribute("is_admin", isAdmin);
-
-        
 
         return "registration_result";
     }

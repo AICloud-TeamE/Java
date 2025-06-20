@@ -19,7 +19,14 @@ public class AccountAdminController {
 
     @GetMapping("/accounts")
     public String showAccountList(HttpSession session, Model model) {
+        String name = (String) session.getAttribute("userName");
+        Integer userId = (Integer) session.getAttribute("userId");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+
+        model.addAttribute("userName", name);
+        model.addAttribute("userId", userId);
+        model.addAttribute("isAdmin", isAdmin);
+
         if (isAdmin == null || !isAdmin) {
             model.addAttribute("error", "管理者のみアクセス可能です。");
             return "error";
@@ -57,13 +64,12 @@ public class AccountAdminController {
         account.setDeleted(false);
 
         accountService.saveAccount(account);
-        session.setAttribute("userId", account.getId());
-        session.setAttribute("isAdmin", account.isAdmin());
+        
         return "redirect:/accounts";
     }
 
-    @GetMapping("/admin/delete/{id}")
-    public String deleteAccount(@PathVariable Integer id, HttpSession session, Model model) {
+    @PostMapping("/accounts/delete")
+    public String deleteAccount(@RequestParam("id") Integer id, HttpSession session, Model model) {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         if (isAdmin == null || !isAdmin) {
             model.addAttribute("error", "管理者のみアクセス可能です。");
@@ -76,6 +82,9 @@ public class AccountAdminController {
     @GetMapping("/accounts/edit/{id}")
     public String showEditForm(@PathVariable Integer id, HttpSession session, Model model) {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        System.out.println("Session ID: " + session.getId());
+        System.out.println("isAdmin: " + session.getAttribute("isAdmin"));
+        System.out.println("userId: " + session.getAttribute("userId"));
         if (isAdmin == null || !isAdmin) {
             model.addAttribute("error", "管理者のみアクセス可能です。");
             return "error";
