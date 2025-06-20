@@ -234,7 +234,7 @@
     <div class="content">
         <h1>天気と売上カレンダー</h1>
 
-        <form method="get" action="/home">
+        <form method="get" action="/history_all">
             <label for="year">年:</label>
             <select id="year" name="year">
                 <option th:each="y : ${years}" th:value="${y}" th:text="${y}" th:selected="${y == selectedYear}">
@@ -251,6 +251,7 @@
         </form>
 
         <div class="calendar">
+            <!-- 曜日ヘッダ -->
             <div class="header">月</div>
             <div class="header">火</div>
             <div class="header">水</div>
@@ -258,6 +259,16 @@
             <div class="header">金</div>
             <div class="header">土</div>
 
+            <!-- 空白セルの挿入 -->
+            <th:block th:with="dowMap=${{'月': 0, '火': 1, '水': 2, '木': 3, '金': 4, '土': 5}}">
+                <th:block th:if="${historyList.size() > 0}">
+                    <th:block th:each="i : ${#numbers.sequence(0, dowMap[historyList[0].weekOfDay] - 1)}">
+                        <div class="day"></div>
+                    </th:block>
+                </th:block>
+            </th:block>
+
+            <!-- 実データの出力 -->
             <th:block th:each="history : ${historyList}">
                 <div class="day">
                     <a th:href="@{/history_date(date=${history.date})}">

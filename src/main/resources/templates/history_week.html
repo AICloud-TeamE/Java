@@ -69,6 +69,16 @@
             margin-bottom: 20px;
         }
 
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .week-buttons form {
+            display: inline;
+            margin: 0 5px;
+        }
+
         .weather-day {
             text-align: left;
             width: 71px;
@@ -135,10 +145,28 @@
             </aside>
         </div>
 
+
+
         <main class="main">
             <div class="header">
                 <h2>週ごとの販売実績と天気</h2>
             </div>
+
+            <div class="header-controls">
+                <h2>週ごとの販売実績と天気</h2>
+                <div class="week-buttons">
+                    <form method="get" action="/history_week">
+                        <input type="hidden" name="offset" th:value="${offset - 1}">
+                        <button type="submit">前週</button>
+                    </form>
+                    <form method="get" action="/history_week">
+                        <input type="hidden" name="offset" th:value="${offset + 1}">
+                        <button type="submit">翌週</button>
+                    </form>
+                </div>
+            </div>
+
+
             <div class="weather-icons" id="weatherIcons"></div>
             <div class="chart-container">
                 <canvas id="myChart"></canvas>
