@@ -130,16 +130,26 @@
 
     <div th:if="${isAdmin}">
         <aside>
-            <ul>
-                <li><strong>メニュー</strong></li>
-                <li><a href="/forecast">需要予測</a></li>
-                <li><a href="/sales_input">需要実績入力</a></li>
-                <li><a href="/history_all">すべての販売実績と天気</a></li>
-                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
-                <li><a href="/products">商品管理</a></li>
-                <li><a href="/accounts">アカウント管理</a></li>
-                <li><a href="/login">ログアウト</a></li>
-            </ul>
+        <ul>
+            <li><strong>メニュー</strong></li>
+            <li><a href="/forecast">需要予測</a></li>
+            <li><a href="/sales_input">需要実績入力</a></li>
+            <li><a href="/history_all">すべての販売実績と天気</a></li>
+            <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+
+            <!-- 仅管理员可见的分组 -->
+            <li th:if="${isAdmin}">
+            <a href="/products">商品管理</a>
+            </li>
+            <li th:if="${isAdmin}">
+            <a href="/accounts">アカウント管理</a>
+            </li>
+        </ul>
+
+        <!-- 始终可见的登出放在侧边栏底部 -->
+        <div class="logout">
+            <a href="/login">ログアウト</a>
+        </div>
         </aside>
     </div>
 
@@ -184,4 +194,27 @@
         </form>
     </div>
 </body>
+
+<script>
+        function calculateTotals() {
+            let totalQuantity = 0;
+            let totalSales = 0;
+ 
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                let quantity = parseInt(input.value) || 0;
+                let price = parseInt(input.getAttribute("data-price"));
+ 
+                totalQuantity += quantity;
+                totalSales += quantity * price;
+            });
+ 
+            document.getElementById("total-quantity").textContent = totalQuantity;
+            document.getElementById("total-sales").textContent = totalSales + " 円";
+        }
+ 
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("input", calculateTotals);
+        });
+</script>
+
 </html>
