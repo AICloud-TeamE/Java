@@ -200,6 +200,11 @@
             const div = document.createElement('div');
             div.className = 'weather-day';
             div.innerHTML = `<div>${data.date}</div><i class="${weatherIconMap[data.weather]} weather-icon-large"></i>`;
+            const link = document.createElement('a');
+            link.href = `/history_date?date=${data.date}`; // 遷移先URL（Spring Boot側でController設定要）
+            link.innerHTML = `<div>${data.date}</div><i class="${weatherIconMap[data.weather]} weather-icon-large"></i>`;
+
+            div.appendChild(link);
             weatherIconsContainer.appendChild(div);
         });
 
