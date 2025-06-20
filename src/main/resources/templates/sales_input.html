@@ -184,4 +184,27 @@
         </form>
     </div>
 </body>
+
+<script>
+        function calculateTotals() {
+            let totalQuantity = 0;
+            let totalSales = 0;
+ 
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                let quantity = parseInt(input.value) || 0;
+                let price = parseInt(input.getAttribute("data-price"));
+ 
+                totalQuantity += quantity;
+                totalSales += quantity * price;
+            });
+ 
+            document.getElementById("total-quantity").textContent = totalQuantity;
+            document.getElementById("total-sales").textContent = totalSales + " 円";
+        }
+ 
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("input", calculateTotals);
+        });
+</script>
+
 </html>
