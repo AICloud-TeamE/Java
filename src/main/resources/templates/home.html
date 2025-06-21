@@ -234,7 +234,7 @@
     </div>
 
 
-    <div class="content"> 
+    <div class="content">
         <h1>天気と売上カレンダー</h1>
 
         <form method="get" action="/history_all">
@@ -267,13 +267,17 @@
 
 
             <!-- 空白セルの挿入 -->
-            <th:block th:with="dowMap=${{'月': 0, '火': 1, '水': 2, '木': 3, '金': 4, '土': 5}}">
-                <th:block th:if="${historyList.size() > 0}">
-                    <th:block th:each="i : ${#numbers.sequence(0, dowMap[historyList[0].weekOfDay] - 1)}">
+            <!-- <th:block th:with="dowMap=${{'月': 0, '火': 1, '水': 2, '木': 3, '金': 4, '土': 5}}"> -->
+            <!-- backend直接DOMAP作成 -->
+            <th:block th:if="${historyList.size() > 0}">
+                <th:block th:if="${blankCount > 0}">
+                    <th:block th:each="i : ${#numbers.sequence(1, blankCount)}">
                         <div class="day"></div>
                     </th:block>
                 </th:block>
             </th:block>
+            </th:block>
+            <!-- </th:block> -->
 
             <!-- 実データの出力 -->
 

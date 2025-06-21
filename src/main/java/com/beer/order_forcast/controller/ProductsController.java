@@ -58,10 +58,39 @@ public class ProductsController {
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
 
-        //attribute?done, need test
-        model.addAttribute("productList",productService.findAll());
+        // attribute?done, need test
+        model.addAttribute("productList", productService.findByIsDeletedFalse());
 
         return "products";
+    }
+
+    @PostMapping("/add-product")
+    public String addProduct(
+            HttpSession session,
+            RedirectAttributes redirectAttributes,
+            @RequestParam(value = "productName") String productName,
+            @RequestParam(value = "productPrice") Integer productPrice) {
+        redirectAttributes.addFlashAttribute("message", productService.addProduct(productName, productPrice));
+        return "redirect:/products";
+    }
+
+    @PostMapping("/edit-product")
+    public String editProduct(
+            RedirectAttributes redirectAttributes,
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "price") Integer price) {
+        redirectAttributes.addFlashAttribute("message", productService.editProduct(id,name,price));
+        return "redirect:/products";
+    
+    }
+
+    @PostMapping("/delete-product/{id}")
+    public String deleteProduct(
+            @PathVariable("id") Integer id,
+            RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("message", productService.deleteProductById(id));
+        return "redirect:/products";
     }
 
 }

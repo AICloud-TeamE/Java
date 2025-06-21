@@ -176,7 +176,7 @@
         </main>
     </div>
 
-    <script>
+    <script th:inline="javascript">//zhang editted
         //サンプルデータｔ        
         //        const historyList = [
         //            { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
@@ -188,7 +188,10 @@
         //        ];
 
 
-        const historyList = /*[[${historyList}]]*/[];
+        //const historyList = /*[[${historyList}]]*/[];
+        const historyList = /*[[${historyList}]]*/ [];
+
+
 
 
         const weatherIconMap = {
@@ -216,7 +219,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: historyList.map(d => d.day),
+                labels: historyList.map(d => d.dayOfWeek),
                 datasets: [
                     {
                         label: '売上',

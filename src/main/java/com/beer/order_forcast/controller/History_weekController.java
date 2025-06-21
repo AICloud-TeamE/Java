@@ -52,7 +52,8 @@ public class History_weekController {
             HttpSession session,
             Model model,
             @RequestParam(value = "year", required = false) Integer year,
-            @RequestParam(value = "month", required = false) Integer month) {
+            @RequestParam(value = "month", required = false) Integer month,
+            @RequestParam(value = "offset", defaultValue = "0") int offset) {
 
         String name = (String) session.getAttribute("userName");
         Integer userId = (Integer) session.getAttribute("userId");
@@ -61,26 +62,31 @@ public class History_weekController {
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("offset", offset); 
+
+        model.addAttribute("historyList",salesHistoryService.getHistoryOfWeek(LocalDate.now(), offset));
+
+
 
         // mock传参，后面要用正式的！！
-        List<Map<String, Object>> historyList = new ArrayList<>();
+        // List<Map<String, Object>> historyList = new ArrayList<>();
 
-        historyList.add(Map.of(
-                "day", "月",
-                "date", "6月10日",
-                "weather", "sunny",
-                "highestTemperature", 31.5,
-                "lowestTemperature", 25.8,
-                "totalSales", 45000));
-        historyList.add(Map.of(
-                "day", "火",
-                "date", "6月11日",
-                "weather", "cloudy",
-                "highestTemperature", 28.0,
-                "lowestTemperature", 23.5,
-                "totalSales", 38000));
+        // historyList.add(Map.of(
+        //         "day", "月",
+        //         "date", "6月10日",
+        //         "weather", "sunny",
+        //         "highestTemperature", 31.5,
+        //         "lowestTemperature", 25.8,
+        //         "totalSales", 45000));
+        // historyList.add(Map.of(
+        //         "day", "火",
+        //         "date", "6月11日",
+        //         "weather", "cloudy",
+        //         "highestTemperature", 28.0,
+        //         "lowestTemperature", 23.5,
+        //         "totalSales", 38000));
 
-        model.addAttribute("historyList", historyList);
+        // model.addAttribute("historyList", historyList);
 
         // //真实参数取得，需修改数据库！！！！
         // List<SalesHistory> salesHistoryList = salesHistoryService.findAll();

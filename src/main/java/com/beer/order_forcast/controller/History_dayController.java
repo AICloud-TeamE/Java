@@ -12,6 +12,7 @@ import java.util.*;
 //servlet package
 import jakarta.servlet.http.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
 //springboot package
 // 控制器类注解
 import org.springframework.stereotype.Controller;
@@ -46,12 +47,10 @@ public class History_dayController {
         System.out.println("controller導入検査");
     }
 
-    @GetMapping("/history_day")
+    @GetMapping("/history_date")
     public String showHistoryWeekPage(
-            HttpSession session,
-            Model model,
-            @RequestParam(value = "year", required = false) Integer year,
-            @RequestParam(value = "month", required = false) Integer month) {
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            Model model, HttpSession session) {
 
         String name = (String) session.getAttribute("userName");
         Integer userId = (Integer) session.getAttribute("userId");
@@ -61,9 +60,13 @@ public class History_dayController {
         model.addAttribute("userId", userId);
         model.addAttribute("is_admin", isAdmin);
 
+        System.out.println("history_dateロード検証");
 
-        
-        return "aaa";
+        SalesWeatherHistoryDTO dto = salesHistoryService.buildOneDaySalesWeatherDTO(date);
+        model.addAttribute("model", dto); // 注意：你 HTML 中用的就是 model.xxx
+        model.addAttribute("beerSales", dto.getProductSales());
+
+        return "history_day";
     }
 
 }

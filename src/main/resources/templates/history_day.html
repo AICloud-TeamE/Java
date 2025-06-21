@@ -190,10 +190,10 @@
         <tbody>
         <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
             <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
-            <td>
+            <!-- <td>
                 <span th:text="${beer.price}"></span>
                 <input type="number" th:value="${beer.price}" style="display:none;">
-            </td>
+            </td> -->
             <td>
                 <span th:text="${beer.unit}"></span>
                 <input type="number" th:value="${beer.unit}" style="display:none;">
