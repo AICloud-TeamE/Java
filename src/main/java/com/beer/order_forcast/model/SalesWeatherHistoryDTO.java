@@ -13,7 +13,7 @@ public class SalesWeatherHistoryDTO {
     private Integer totalSales;
     private List<ProductSalesDTO> productSales;
 
-    //追加可能機能
+    //
     private String editHistory;
     private String editor;
 

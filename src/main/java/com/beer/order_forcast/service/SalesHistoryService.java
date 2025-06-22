@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Service
 public class SalesHistoryService {
@@ -19,16 +22,19 @@ public class SalesHistoryService {
     private final ProductRepository productRepository;
     private final WeatherHistoryRepository weatherHistoryRepository;
     private final WeatherRepository weatherRepository;
+    private final AccountRepository accountRepository;
 
     public SalesHistoryService(
             SalesHistoryRepository repository,
             ProductRepository productRepository,
             WeatherHistoryRepository weatherHistoryRepository,
+            AccountRepository accountRepository,
             WeatherRepository weatherRepository) {
         this.repository = repository;
         this.productRepository = productRepository;
         this.weatherHistoryRepository = weatherHistoryRepository;
         this.weatherRepository = weatherRepository;
+        this.accountRepository = accountRepository;
     }
 
     public List<SalesHistory> findAll() {
@@ -51,17 +57,43 @@ public class SalesHistoryService {
 
         List<ProductSalesDTO> productSales = new ArrayList<>();
         int totalSales = 0;
+        SalesWeatherHistoryDTO dto = new SalesWeatherHistoryDTO();
 
         for (SalesHistory salesHistory : salesHistoryList) {
             ProductSalesDTO oneProductSales = new ProductSalesDTO();
             oneProductSales.setUnit(salesHistory.getSales_count());
             oneProductSales.setRevenue(salesHistory.getSales_revenue());
+            oneProductSales.setPrice();
             oneProductSales.setName(productRepository.findById(salesHistory.getProduct_id()).orElse(null).getName());
             totalSales += salesHistory.getSales_revenue();
             productSales.add(oneProductSales);
+
+            Optional<Account> accOpt = accountRepository.findById(salesHistory.getUpdate_id());
+            String editorName;
+
+            if (accOpt.isPresent()) {
+                editorName = accOpt.get().getName();
+            } else {
+                editorName = "不明";
+            }
+
+            dto.setEditor(editorName);
+
+            Timestamp timestamp = salesHistory.getUpdated_at();
+            LocalDateTime ldt = timestamp.toLocalDateTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            String formattedTime = ldt.format(formatter);
+            dto.setEditHistory(formattedTime);
+
+            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日
+            // HH:mm");
+            // String formattedUpdateHistory =
+            // salesHistory.getUpdated_at().format(formatter);
+
+            // dto.setEditHistory(formattedUpdateHistory);
         }
 
-        SalesWeatherHistoryDTO dto = new SalesWeatherHistoryDTO();
         dto.setDate(date);
 
         if (wh != null) {
@@ -79,6 +111,24 @@ public class SalesHistoryService {
         dto.setProductSales(productSales);
 
         return dto;
+    }
+
+    // history day編集画面のeditを保存
+    public String editHistoryOfDay(String name, Integer unit, Integer price, LocalDate date) {
+        Integer productId = productRepository.findByName(name).getId();
+        SalesHistory sh = repository.findByDateAndProductId(date, productId);
+        if (sh == null) {
+            return "該当する販売履歴が見つかりませんでした。";
+        }
+
+        sh.setSales_count(unit);
+        sh.setSales_revenue(unit * price);
+        try {
+            repository.save(sh);
+            return "販売実績更新成功！";
+        } catch (Exception e) {
+            return "エラー：" + e.getMessage();
+        }
     }
 
     // 找这周dto

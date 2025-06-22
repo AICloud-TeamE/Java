@@ -48,7 +48,7 @@ public class History_dayController {
     }
 
     @GetMapping("/history_date")
-    public String showHistoryWeekPage(
+    public String showHistoryDayPage(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             Model model, HttpSession session) {
 
@@ -58,15 +58,27 @@ public class History_dayController {
 
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
-        model.addAttribute("is_admin", isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
 
         System.out.println("history_dateロード検証");
 
         SalesWeatherHistoryDTO dto = salesHistoryService.buildOneDaySalesWeatherDTO(date);
-        model.addAttribute("model", dto); // 注意：你 HTML 中用的就是 model.xxx
+        model.addAttribute("model", dto); //HTML 中用的就是 model.xxx
         model.addAttribute("beerSales", dto.getProductSales());
 
         return "history_day";
+    }
+
+    @PostMapping("/save")
+    public String saveHistoryDayEdit(
+        @RequestParam("name") String name,
+        @RequestParam("unit") Integer unit,
+        @RequestParam("price") Integer price,
+        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+        RedirectAttributes redirectAttributes
+    ){
+        redirectAttributes.addFlashAttribute("message",salesHistoryService.editHistoryOfDay(name,unit,price,date));
+        return "redirect:/history_date?date=" + date.toString();
     }
 
 }
