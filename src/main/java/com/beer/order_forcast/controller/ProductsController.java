@@ -58,14 +58,9 @@ public class ProductsController {
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
 
-<<<<<<< HEAD
 
-        //attribute?done, need test
-        model.addAttribute("productList",productService.findAll());
-=======
         // attribute?done, need test
         model.addAttribute("productList", productService.findByIsDeletedFalse());
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
 
         return "products";
     }

@@ -11,10 +11,7 @@ import java.util.Map;
 public class FunctionTestController {
 
     @GetMapping("/test-function")
-<<<<<<< HEAD
 
-=======
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
 
 
     public ResponseEntity<String> callAzureFunction() {
@@ -41,11 +38,7 @@ public class FunctionTestController {
                 entity,
                 String.class
         );
-<<<<<<< HEAD
-        // String response = restTemplate.getForObject(functionUrl, String.class);
-=======
-        
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
+
 
 
         return response; // 打印对方返回的数据

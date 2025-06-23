@@ -50,10 +50,7 @@ public class AccountService {
             return 2; // 密码错误
         }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
         if (account.isAdmin()){
             return 0;//登录成功-管理者
         }
@@ -76,8 +73,5 @@ public class AccountService {
         return accountRepository.findByEmailAndIsDeletedFalse(email).isPresent();
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
 }
