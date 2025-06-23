@@ -1,125 +1,146 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>商品管理 | 発注予測システム</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registration_result</title>
     <style>
-        /* ===== 全体設定 ===== */
+        /* ===== 全体のスタイル設定 ===== */
+
         body {
             background-color: white;
+            /* ページ全体の背景色を白に設定 */
             font-family: Arial, sans-serif;
+            /* フォントはArial、なければsans-serifを使用 */
             margin: 0;
+            /* ページの外側の余白をゼロに設定 */
             padding: 0;
+            /* ページ内側の余白をゼロに設定 */
         }
 
-        /* ===== ヘッダー ===== */
+        /* ===== ヘッダーのデザイン ===== */
         header {
             background-color: #ffc107;
+            /* ヘッダーの背景色を黄色系に設定 */
             color: black;
+            /* ヘッダーの文字色を黒に設定 */
             padding: 20px;
+            /* ヘッダー内部の余白を上下左右20pxに設定 */
             font-size: 24px;
+            /* フォントサイズを24pxに設定して大きめに */
             text-align: center;
+            /* テキストを中央寄せにする */
             font-weight: bold;
+            /* フォントを太字にする */
         }
 
-        /* ===== サイドバー ===== */
+        /* ===== サイドバーのデザイン ===== */
         aside {
             background-color: #fff177;
+            /* サイドバーの背景を明るい黄色に設定 */
             padding: 20px;
+            /* 内側の余白を20pxに */
             width: 200px;
+            /* サイドバーの幅を220pxに固定 */
             position: fixed;
+            /* 常に左端に固定表示されるようにする */
             left: 0;
+            /* 左端に配置 */
             height: 100%;
+            /* 高さを画面全体に広げる */
         }
 
         aside ul {
             list-style: none;
+            /* デフォルトのリストマーカーを非表示 */
             padding: 0;
+            /* 内側の余白をなくす */
         }
 
         aside ul li {
             margin-bottom: 15px;
+            /* リストアイテム間の縦の余白を設定 */
         }
 
         aside ul li a {
             text-decoration: none;
+            /* リンクの下線を削除 */
             color: black;
+            /* リンクの文字色を黒に設定 */
             font-weight: bold;
+            /* 太字で表示 */
             display: block;
+            /* ブロック要素として扱い、クリック範囲を広げる */
             padding: 8px;
+            /* リンク内の余白を8pxに設定 */
             border-radius: 5px;
+            /* 角丸の半径を5pxに */
             transition: background-color 0.3s;
+            /* ホバー時の色変化を0.3秒でなめらかに */
         }
 
         aside ul li a:hover {
             background-color: #FFD54F;
+            /* ホバー時に背景色をやや濃い黄色に変更 */
         }
 
-        /* ===== メインコンテンツエリア ===== */
+        /* ===== メインコンテンツのデザイン ===== */
         .content {
             margin-left: 250px;
+            /* サイドバーの幅分だけ左にスペースを空ける */
             padding: 20px;
+            /* 内部の余白 */
+            text-align: center;
+            /* 中央揃えで整える */
         }
 
         h2 {
-            text-align: center;
             color: #333;
+            /* 見出しの文字色をやや暗めのグレーに */
         }
 
-        form {
-            margin: 20px auto;
-            width: fit-content;
-            text-align: left;
+        p {
+            font-size: 18px;
+            /* 本文テキストのサイズを18pxに */
+            color: #555;
+            /* 本文の文字色を中間グレーに設定 */
         }
 
-        form div {
-            margin-bottom: 10px;
+        /* ===== 「ホームへ戻る」ボタンのデザイン ===== */
+        .button-container {
+            margin-top: 20px;
+            /* 上との間隔を確保 */
         }
 
-        input[type="text"],
-        input[type="number"] {
-            padding: 5px;
-            font-size: 14px;
-            width: 150px;
-        }
-
-        button {
+        .home-button {
+            display: inline-block;
+            /* インライン要素として扱いつつ幅と高さを持たせる */
             background-color: #FFC107;
+            /* 黄色系の背景色 */
             color: black;
-            padding: 8px 16px;
-            font-size: 14px;
-            border: none;
+            /* 文字色は黒 */
+            padding: 10px 20px;
+            /* 縦10px、横20pxの余白 */
             border-radius: 5px;
-            cursor: pointer;
+            /* 角を丸くする */
+            text-decoration: none;
+            /* 下線をなくす */
+            font-weight: bold;
+            /* 太字にする */
             transition: background-color 0.3s;
+            /* 背景色の変化にアニメーションをつける */
         }
 
-        button:hover {
+        .home-button:hover {
             background-color: #FFA000;
-        }
-
-        table {
-            width: 90%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #f3f3f3;
+            /* ホバー時に濃いめの黄色に変更 */
         }
     </style>
+
 </head>
 
 <body>
-
     <header>発注予測システム</header>
 
     <div th:if="${isAdmin}">
@@ -130,8 +151,8 @@
 
                 <li><a href="/sales_input">販売実績入力</a></li>
 
-                <li><a href="/history_all">すべての販売実績と天気</a></li>
-                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                <li><a href="/history_all">販売実績と天気</a></li>
+                <li><a href="/history_week">すべての販売実績と天気</a></li>
                 <li><a href="/products">商品管理</a></li>
                 <li><a href="/accounts">アカウント管理</a></li>
                 <li><a href="/login">ログアウト</a></li>
@@ -140,111 +161,14 @@
     </div>
 
     <div class="content">
-        <h2>商品管理</h2>
+        <h2>登録が完了しました！</h2>
+        <p>販売データが正常に登録されました。</p>
 
-        <!-- 商品追加フォーム -->
-        <form th:action="@{/add-product}" method="post" name="addForm">
-            <div>
-                <label for="productName">商品名：</label>
-                <input type="text" id="productName" name="productName" placeholder="商品名を入力してください" required>
-            </div>
-            <div>
-                <label for="productPrice">単価：</label>
-                <input type="number" id="productPrice" name="productPrice" placeholder="単価を入力してください" min="0" required>
-            </div>
-            <div>
-                <button type="submit" id="submitButton">登録</button>
-            </div>
-        </form>
+        <div class="button-container">
 
-        <hr>
-
-        <h2>商品一覧</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>商品名</th>
-                    <th>単価</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="product : ${productList}" th:attr="data-id=${product.id}">
-                    <!-- 商品名 -->
-                    <td>
-                        <span th:text="${product.name}">商品名</span>
-                        <input type="text" name="editName" th:value="${product.name}" style="display: none;">
-                    </td>
-
-                    <!-- 単価 -->
-                    <td>
-                        <span th:text="${product.price}">単価</span>
-                        <input type="number" name="editPrice" th:value="${product.price}" style="display: none;">
-                    </td>
-
-                    <!-- 操作 -->
-                    <td>
-                        <!-- 編集ボタン -->
-                        <button type="button" onclick="toggleEdit(this)">編集</button>
-
-                        <!-- 編集保存フォーム -->
-                        <form th:action="@{/edit-product}" method="post" style="display:inline;"
-                            onsubmit="return submitEdit(this)">
-                            <input type="hidden" name="id" th:value="${product.id}">
-                            <input type="hidden" name="name" >
-                            <input type="hidden" name="price" >
-                            <button type="submit" style="display: none;">保存</button>
-                        </form>
-
-                        <!-- 削除フォーム -->
-                        <form th:action="@{/delete-product/{id}(id=${product.id})}" method="post"
-                            style="display:inline;">
-                            <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(productList)}">
-                    <td colspan="3">商品が登録されていません。</td>
-                </tr>
-            </tbody>
-        </table>
+            <a href="/sales_input" class="home-button">終了</a>
+        </div>
     </div>
-
-    <script>
-        function toggleEdit(btn) {
-            const row = btn.closest('tr');
-            const spans = row.querySelectorAll('span');
-            const inputs = row.querySelectorAll('input[type="text"], input[type="number"]');
-            const saveButton = row.querySelector('form button[type="submit"]');
-
-            const editing = saveButton.style.display !== 'none';
-
-            inputs.forEach(el => el.style.display = editing ? 'none' : 'inline-block');
-            spans.forEach(el => el.style.display = editing ? 'inline' : 'none');
-            saveButton.style.display = editing ? 'none' : 'inline-block';
-
-            btn.style.display = editing ? 'inline-block' : 'none';
-
-        }
-
-        function submitEdit(form) {
-            const row = form.closest('tr');
-            form.name.value = row.querySelector('input[name="editName"]').value;
-            form.price.value = row.querySelector('input[name="editPrice"]').value;
-            return true;
-        }
-    </script>
-
-    <!-- zhang edit: error popping-up message shown with error of adding products -->
-    <p th:if="${message}" th:id="msg" th:text="${message}" style="display: none;"></p>
-    <script>
-        window.addEventListener("DOMContentLoaded", function () {
-            const msg = document.getElementById("msg");
-            if (msg && msg.textContent.trim() !== "") {
-                alert(msg.textContent);
-            }
-        });
-    </script>
 
 
 </body>

@@ -4,140 +4,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>registration_result</title>
+    <title>sales_input</title>
     <style>
         /* ===== 全体のスタイル設定 ===== */
 
+        /* 背景を白に設定し、フォントを統一 */
         body {
             background-color: white;
-            /* ページ全体の背景色を白に設定 */
+            /* 背景色を白に設定 */
             font-family: Arial, sans-serif;
-            /* フォントはArial、なければsans-serifを使用 */
+            /* フォントをArialに設定し、代替としてsans-serifを使用 */
             margin: 0;
-            /* ページの外側の余白をゼロに設定 */
+            /* ページの余白をなくす */
             padding: 0;
-            /* ページ内側の余白をゼロに設定 */
+            /* ページのパディングをなくす */
         }
 
         /* ===== ヘッダーのデザイン ===== */
+
+        /* ヘッダー部分のスタイルを設定 */
         header {
             background-color: #ffc107;
-            /* ヘッダーの背景色を黄色系に設定 */
+            /* ヘッダーの背景色を黄色系 (#FFC107) に設定 */
             color: black;
-            /* ヘッダーの文字色を黒に設定 */
+            /* 文字色を黒に設定 */
             padding: 20px;
-            /* ヘッダー内部の余白を上下左右20pxに設定 */
+            /* 内側の余白を20pxに設定 */
             font-size: 24px;
-            /* フォントサイズを24pxに設定して大きめに */
+            /* フォントサイズを24pxに設定 */
             text-align: center;
-            /* テキストを中央寄せにする */
+            /* テキストを中央揃えにする */
             font-weight: bold;
             /* フォントを太字にする */
         }
 
         /* ===== サイドバーのデザイン ===== */
+
+        /* サイドバーのレイアウト設定 */
         aside {
             background-color: #fff177;
-            /* サイドバーの背景を明るい黄色に設定 */
+            /* サイドバーの背景色を明るい黄色 (#FFF177) に設定 */
             padding: 20px;
-            /* 内側の余白を20pxに */
+            /* 内側の余白を20pxに設定 */
             width: 200px;
-            /* サイドバーの幅を220pxに固定 */
+            /* 幅を220pxに設定 */
             position: fixed;
-            /* 常に左端に固定表示されるようにする */
+            /* 画面の左側に固定表示 */
+            /*top: 0; /* 上端からの距離を0pxに設定 */
             left: 0;
-            /* 左端に配置 */
+            /* 左端からの距離を0pxに設定 */
             height: 100%;
-            /* 高さを画面全体に広げる */
+            /* 高さを画面いっぱいに設定 */
         }
 
+        /* サイドバーのリストデザイン */
         aside ul {
             list-style: none;
-            /* デフォルトのリストマーカーを非表示 */
+            /* リストのデフォルトのマーカーを削除 */
             padding: 0;
             /* 内側の余白をなくす */
         }
 
+        /* リストアイテムの間隔調整 */
         aside ul li {
             margin-bottom: 15px;
-            /* リストアイテム間の縦の余白を設定 */
+            /* 各リストアイテムの間隔を15pxに設定 */
         }
 
+        /* リンクのデザイン */
         aside ul li a {
             text-decoration: none;
-            /* リンクの下線を削除 */
+            /* 下線を削除 */
             color: black;
-            /* リンクの文字色を黒に設定 */
+            /* 文字色を黒に設定 */
             font-weight: bold;
-            /* 太字で表示 */
+            /* フォントを太字にする */
             display: block;
-            /* ブロック要素として扱い、クリック範囲を広げる */
+            /* リンクをブロック要素として扱う */
             padding: 8px;
-            /* リンク内の余白を8pxに設定 */
-            border-radius: 5px;
-            /* 角丸の半径を5pxに */
-            transition: background-color 0.3s;
-            /* ホバー時の色変化を0.3秒でなめらかに */
-        }
-
-        aside ul li a:hover {
-            background-color: #FFD54F;
-            /* ホバー時に背景色をやや濃い黄色に変更 */
-        }
-
-        /* ===== メインコンテンツのデザイン ===== */
-        .content {
-            margin-left: 250px;
-            /* サイドバーの幅分だけ左にスペースを空ける */
-            padding: 20px;
-            /* 内部の余白 */
-            text-align: center;
-            /* 中央揃えで整える */
-        }
-
-        h2 {
-            color: #333;
-            /* 見出しの文字色をやや暗めのグレーに */
-        }
-
-        p {
-            font-size: 18px;
-            /* 本文テキストのサイズを18pxに */
-            color: #555;
-            /* 本文の文字色を中間グレーに設定 */
-        }
-
-        /* ===== 「ホームへ戻る」ボタンのデザイン ===== */
-        .button-container {
-            margin-top: 20px;
-            /* 上との間隔を確保 */
-        }
-
-        .home-button {
-            display: inline-block;
-            /* インライン要素として扱いつつ幅と高さを持たせる */
-            background-color: #FFC107;
-            /* 黄色系の背景色 */
-            color: black;
-            /* 文字色は黒 */
-            padding: 10px 20px;
-            /* 縦10px、横20pxの余白 */
+            /* 内側の余白を8pxに設定 */
             border-radius: 5px;
             /* 角を丸くする */
-            text-decoration: none;
-            /* 下線をなくす */
-            font-weight: bold;
-            /* 太字にする */
             transition: background-color 0.3s;
-            /* 背景色の変化にアニメーションをつける */
+            /* 背景色の変更をスムーズにする */
         }
 
-        .home-button:hover {
+        /* リンクのホバー時のスタイル */
+        aside ul li a:hover {
+            background-color: #FFD54F;
+            /* ホバー時の背景色を少し濃い黄色 (#FFD54F) に変更 */
+        }
+
+        /* ===== コンテンツのスタイル ===== */
+
+        /* メインコンテンツのレイアウト調整 */
+        div.content {
+            margin-left: 250px;
+            /* サイドバーの幅に合わせて左側の余白を確保 */
+            padding: 20px;
+            /* 内側の余白を設定 */
+        }
+
+        /* ===== テーブルのデザイン ===== */
+
+        /* テーブル全体のスタイル */
+        table {
+            width: 100%;
+            /* テーブルを画面幅いっぱいにする */
+            border-collapse: collapse;
+            /* セルのボーダーをまとめる */
+            margin-top: 20px;
+            /* 上の要素との余白を20pxに設定 */
+        }
+
+        /* ヘッダーセルとデータセルの共通スタイル */
+        th,
+        td {
+            border: 1px solid #ddd;
+            /* セルの境界線を薄いグレーに設定 */
+            padding: 10px;
+            /* 内側の余白を10pxに設定 */
+            text-align: center;
+            /* テキストを中央揃えにする */
+        }
+
+        /* テーブルのヘッダーセルの背景色 */
+        th {
+            background-color: #FFEB3B;
+            /* ヘッダーセルの背景色を明るい黄色 (#FFEB3B) に設定 */
+        }
+
+        /* ===== ボタンのデザイン ===== */
+
+        /* ボタンのコンテナを右寄せ */
+        .button-container {
+            display: flex;
+            /* ボタンをフレックスボックスで配置 */
+            justify-content: flex-end;
+            /* ボタンを右寄せ */
+            margin-top: 20px;
+            /* 上部に余白を設定 */
+        }
+
+        /* ボタンの基本デザイン */
+        button {
+            background-color: #FFC107;
+            /* ボタンの背景色を黄色系 (#FFC107) に設定 */
+            color: black;
+            /* 文字色を黒に設定 */
+            padding: 10px 20px;
+            /* 内側の余白を上下10px、左右20pxに設定 */
+            border: none;
+            /* ボーダーをなくす */
+            cursor: pointer;
+            /* ホバー時にカーソルをポインターに変更 */
+            font-size: 16px;
+            /* フォントサイズを16pxに設定 */
+            border-radius: 5px;
+            /* 角を丸くする */
+            transition: background-color 0.3s;
+            /* 背景色の変更をスムーズにする */
+        }
+
+        /* ボタンのホバー時のスタイル */
+        button:hover {
             background-color: #FFA000;
-            /* ホバー時に濃いめの黄色に変更 */
+            /* ホバー時の背景色を濃い黄色 (#FFA000) に変更 */
         }
     </style>
-
 </head>
 
 <body>
@@ -145,56 +179,102 @@
 
     <div th:if="${isAdmin}">
         <aside>
+
+
             <ul>
                 <li><strong>メニュー</strong></li>
                 <li><a href="/forecast">需要予測</a></li>
+                <li><a href="/sales_input">需要実績入力</a></li>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
 
-                <li><a href="/sales_input">販売実績入力</a></li>
-
-                <li><a href="/history_all">販売実績と天気</a></li>
-                <li><a href="/history_week">すべての販売実績と天気</a></li>
-                <li><a href="/products">商品管理</a></li>
-                <li><a href="/accounts">アカウント管理</a></li>
-                <li><a href="/login">ログアウト</a></li>
+                <!-- 仅管理员可见的分组 -->
+                <li th:if="${isAdmin}">
+                    <a href="/products">商品管理</a>
+                </li>
+                <li th:if="${isAdmin}">
+                    <a href="/accounts">アカウント管理</a>
+                </li>
             </ul>
+
+
+
         </aside>
+    </div>
+    <!-- 始终可见的登出放在侧边栏底部 -->
+    <div class="logout">
+        <a href="/login">ログアウト</a>
     </div>
 
     <div class="content">
-        <h2>登録が完了しました！</h2>
-        <p>販売データが正常に登録されました。</p>
+        <div id="date-display"></div>
 
-<<<<<<< HEAD
+        
+        <!-- 追加营业日显示 -->
+        <p>本日（営業日）: <span th:text="${#temporals.format(businessDate, 'M月d日(E)')}"></span></p>
 
-        <!-- <div class="button-container">
-            <a href="/home" class="home-button">ホームへ戻る</a>
-        </div>       -->
 
-    <div style="text-align: center; margin-top: 30px;">
-            <a th:href="@{/sales_input}">
-            <button type="button">終了</button>
-            </a>
+        <form action="/sales_input" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>商品単価（円）</th>
+                        <th>販売数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="beer : ${beerList}">
+                        <td th:text="${beer.name}"></td>
+                        <td th:text="${beer.price}"></td>
+                        <td>
+                            <input type="number" class="quantity-input" th:data-price="${beer.price}" min="0"
+                                th:name="'input' + ${beer.id}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>集計結果</h2>
+            <table>
+                <tr>
+                    <th>合計販売本数</th>
+                    <td id="total-quantity">0</td>
+                </tr>
+                <tr>
+                    <th>合計売上金額</th>
+                    <td id="total-sales">0 円</td>
+                </tr>
+            </table>
+
+            <div class="button-container">
+                <button type="submit">登録</button>
+            </div>
+        </form>
     </div>
- 
-<!-- 
-=======
-        <div class="button-container">
-
-            <a href="/home" class="home-button">終了</a>
-        </div>
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
-    </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <a th:href="@{/sales_input}">
-            <button type="button">終了</button>
-            </a>
-<<<<<<< HEAD
-        </div> -->
-=======
-        </div>
-
->>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
-
 </body>
+
+
+<script>
+    function calculateTotals() {
+        let totalQuantity = 0;
+        let totalSales = 0;
+
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            let quantity = parseInt(input.value) || 0;
+            let price = parseInt(input.getAttribute("data-price"));
+
+            totalQuantity += quantity;
+            totalSales += quantity * price;
+        });
+
+        document.getElementById("total-quantity").textContent = totalQuantity;
+        document.getElementById("total-sales").textContent = totalSales + " 円";
+    }
+
+    document.querySelectorAll(".quantity-input").forEach(input => {
+        input.addEventListener("input", calculateTotals);
+    });
+</script>
 
 </html>
