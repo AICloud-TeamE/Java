@@ -11,7 +11,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: white;
-            
+
         }
 
         header {
@@ -84,6 +84,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .week-buttons form {
             display: inline;
             margin: 0 5px;
@@ -136,54 +137,54 @@
         }
 
         @media screen and (max-width: 768px) {
-  header {
-    font-size: 18px;
-    padding: 15px;
-  }
+            header {
+                font-size: 18px;
+                padding: 15px;
+            }
 
-  .layout {
-    flex-direction: column;
-  }
+            .layout {
+                flex-direction: column;
+            }
 
-  aside {
-    position: static;
-    width: 100%;
-    height: auto;
-    margin-top: 0;
-    padding: 10px;
-  }
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                margin-top: 0;
+                padding: 10px;
+            }
 
-  .main {
-    margin-left: 0;
-    margin-top: 10px;
-    padding: 10px;
-  }
+            .main {
+                margin-left: 0;
+                margin-top: 10px;
+                padding: 10px;
+            }
 
-  .header-controls {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
+            .header-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
 
-  .week-buttons {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
+            .week-buttons {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
 
-  .weather-icons {
-    margin-left: 0;
-    justify-content: center;
-  }
+            .weather-icons {
+                margin-left: 0;
+                justify-content: center;
+            }
 
-  .chart-container {
-    height: 300px;
-  }
+            .chart-container {
+                height: 300px;
+            }
 
-  canvas {
-    height: auto !important;
-  }
-}
+            canvas {
+                height: auto !important;
+            }
+        }
     </style>
 </head>
 
@@ -232,14 +233,14 @@
 
     <script th:inline="javascript">//zhang editted
         //サンプルデータｔ        
-        //        const historyList = [
-        //            { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
-        //            { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
-        //            { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
-        //            { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
-        //            { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
-        //            { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
-        //        ];
+        //const historyList = [
+        //    { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
+        //    { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
+        //    { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
+        //    { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
+        //    { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
+        //    { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
+        //];
 
 
         //const historyList = /*[[${historyList}]]*/[];
@@ -258,14 +259,12 @@
         historyList.forEach(data => {
             const div = document.createElement('div');
             div.className = 'weather-day';
-            div.innerHTML = `<div>${data.date}</div><i class="${weatherIconMap[data.weather]} weather-icon-large"></i>`;
 
             const link = document.createElement('a');
-            link.href = `/history_date?date=${data.date}`; // 遷移先URL（Spring Boot側でController設定要）
+            link.href = `/history_date?date=${data.date}`;
             link.innerHTML = `<div>${data.date}</div><i class="${weatherIconMap[data.weather]} weather-icon-large"></i>`;
 
             div.appendChild(link);
-
             weatherIconsContainer.appendChild(div);
         });
 
