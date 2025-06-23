@@ -91,7 +91,7 @@
         }
 
         .weather-day {
-            text-align: left;
+            text-align: center;
             width: 71px;
             margin-right: 1px;
 
@@ -99,14 +99,23 @@
 
         .weather-icons {
             display: flex;
-            justify-content: left;
-            gap: 10px;
+            justify-content: space-between;
+            /* または center/flex-start */
             flex-wrap: wrap;
-            margin-left: 100px;
+            gap: 10px;
+            margin: 0 auto;
+            max-width: 600px;
+            /* 必要に応じて調整 */
         }
 
         .weather-icon-large {
-            font-size: 2em;
+            font-size: 32px;
+            /* 固定サイズにする */
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
         .sunny {
@@ -122,18 +131,15 @@
         }
 
         .chart-container {
-            position: relative;
             width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 700px;
             height: 400px;
+            margin: 0 auto;
         }
 
         canvas {
-            background: #fff;
-            border-radius: 8px;
-            width: 100% !important;
-            height: 100% !important;
+            width: 700px !important;
+            height: 400px !important;
         }
 
         @media screen and (max-width: 768px) {
@@ -233,18 +239,18 @@
 
     <script th:inline="javascript">//zhang editted
         //サンプルデータｔ        
-        //const historyList = [
-        //    { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
-        //    { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
-        //    { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
-        //    { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
-        //    { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
-        //    { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
-        //];
+        const historyList = [
+            { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
+            { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
+            { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
+            { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
+            { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
+            { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
+        ];
 
 
         //const historyList = /*[[${historyList}]]*/[];
-        const historyList = /*[[${historyList}]]*/ [];
+        //const historyList = /*[[${historyList}]]*/ [];
 
 
 
@@ -272,7 +278,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: historyList.map(d => d.dayOfWeek),
+                labels: historyList.map(d => d.day),
                 datasets: [
                     {
                         label: '売上',
