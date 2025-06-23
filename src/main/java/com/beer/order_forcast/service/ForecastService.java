@@ -14,10 +14,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.beer.order_forcast.model.ForecastDTO;
+import com.beer.order_forcast.repository.WeatherHistoryRepository;
+import com.beer.order_forcast.repository.WeatherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -61,12 +64,12 @@ public class ForecastService {
         List<ForecastDTO> dtoList = new ArrayList<>();
 
         Map<String, String> beerNameMap = Map.of(
-                "pale_ale_bottles", "ビールA",
-                "lager_bottles", "ビールB",
-                "ipa_bottles", "ビールC",
-                "white_beer_bottles", "ビールD",
-                "dark_beer_bottles", "ビールE",
-                "fruit_beer_bottles", "ビールF");
+                "pale_ale_bottles", "ペールエール",
+                "lager_bottles", "ラガー",
+                "ipa_bottles", "IPA",
+                "white_beer_bottles", "ホワイトビール",
+                "dark_beer_bottles", "黒ビール",
+                "fruit_beer_bottles", "フルーツビール");
 
         for (Map<String, Object> item : rawList) {
             ForecastDTO dto = new ForecastDTO();
@@ -78,10 +81,15 @@ public class ForecastService {
             dto.setWeather(item.get("weather").toString());
 
             // 平均气温 ±2 组成温度范围
-            float mean = Float.parseFloat(item.get("apparent_temperature_mean").toString());
-            int low = Math.round(mean - 2);
-            int high = Math.round(mean + 2);
-            dto.setTemperatureRange(low + "〜" + high + "℃");
+            // float mean =
+            // Float.parseFloat(item.get("apparent_temperature_mean").toString());
+            // int low = Math.round(mean - 2);
+            // int high = Math.round(mean + 2);
+            // dto.setTemperatureRange(low + "〜" + high + "℃");
+
+            float max = Float.parseFloat(item.get("temperature_2m_max").toString());
+            float min = Float.parseFloat(item.get("temperature_2m_min").toString());
+            dto.setTemperatureRange(Math.round(min) + "〜" + Math.round(max) + "℃");
 
             // 预测销量映射
             Map<String, Integer> demandMap = new LinkedHashMap<>();
@@ -97,21 +105,27 @@ public class ForecastService {
 
         return dtoList;
     }
-    public LocalDate getNextOrderDate(LocalDate date) {
-    DayOfWeek dayOfWeek = date.getDayOfWeek();
-    switch (dayOfWeek) {
-        case MONDAY:
-        case TUESDAY:
-        case WEDNESDAY:
-            return date.with(TemporalAdjusters.nextOrSame(DayOfWeek.THURSDAY));
-        case THURSDAY:
-        case FRIDAY:
-        case SATURDAY:
-        case SUNDAY:
-        default:
-            return date.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
-    }
-}
 
+    public LocalDate getNextOrderDate(LocalDate date) {
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        switch (dayOfWeek) {
+
+            case TUESDAY:
+            case WEDNESDAY:
+                return date.with(TemporalAdjusters.nextOrSame(DayOfWeek.THURSDAY));
+            case MONDAY:
+            case THURSDAY:
+                return date;
+
+            case FRIDAY:
+            case SATURDAY:
+            case SUNDAY:
+            default:
+                return date.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+        }
+    }
+
+    
+    
 
 }

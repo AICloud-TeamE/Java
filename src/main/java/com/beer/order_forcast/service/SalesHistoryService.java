@@ -215,17 +215,25 @@ public class SalesHistoryService {
             if (existingDates.contains(date))
                 continue;
 
-            // DayOfWeek dow = date.getDayOfWeek();
-            // if (dow == DayOfWeek.SUNDAY)
-            // continue;
+            DayOfWeek dow = date.getDayOfWeek();
+            if (dow == DayOfWeek.SUNDAY)
+                continue;
 
+
+            //blank daysもセールス取得
+            int totalSales = 0;
+            for (SalesHistory sh : salesHistories) {
+                if (sh.getDate().equals(date)) {
+                    totalSales += sh.getSales_revenue();
+                }
+            }
             // String weekdayName = getJapaneseShortWeekday(dow);
             SalesWeatherHistoryDTO blankDay = new SalesWeatherHistoryDTO();
             blankDay.setDate(date);
             blankDay.setWeather("");
             blankDay.setHighestTemperature(null);
             blankDay.setLowestTemperature(null);
-            blankDay.setTotalSales(null);
+            blankDay.setTotalSales(totalSales);
             dtoList.add(blankDay);
         }
 

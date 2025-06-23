@@ -146,6 +146,8 @@ public class ForecastController {
         return "forecast";
     }
 
+    
+
     // 之后再说分界线！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
     // @GetMapping("/forecast")
     // public String getForecast(HttpSession session) {
