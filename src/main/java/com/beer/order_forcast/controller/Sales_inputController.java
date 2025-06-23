@@ -66,7 +66,11 @@ public class Sales_inputController {
         String name = (String) session.getAttribute("userName");
         Integer userId = (Integer) session.getAttribute("userId");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-
+        if (isAdmin == null) {
+        return "redirect:/login";
+        } if (!isAdmin) {
+        return "redirect:/home";
+        }
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
@@ -151,7 +155,11 @@ public class Sales_inputController {
         String name = (String) session.getAttribute("userName");
         Integer userId = (Integer) session.getAttribute("userId");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-
+        if (isAdmin == null) {
+        return "redirect:/login";
+        }if (!isAdmin) {
+        return "redirect:/home";
+        }
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
         model.addAttribute("is_admin", isAdmin);

@@ -20,8 +20,8 @@ public class Account {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(name = "is_admin", nullable = false)
-    private boolean isAdmin;
+    @Column(name = "is_admin", nullable = true)
+    private Boolean isAdmin;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
@@ -62,7 +62,7 @@ public class Account {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
+    public void setAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
