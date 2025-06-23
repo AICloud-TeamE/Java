@@ -220,6 +220,12 @@
             max-width: 300px;
             margin-top: 10px;
         }
+
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -282,10 +288,10 @@
                         <td id="total-sales">0 円</td>
                     </tr>
                 </table>
-
                 <div class="button-container">
-                    <button type="submit">登録</button>
+                    <button type="submit" id="submit-button" disabled>登録</button>
                 </div>
+                <p id="error-message" style="color: red; text-align: center;"></p>
             </form>
         </main>
     </div>
@@ -312,6 +318,47 @@
     document.querySelectorAll(".quantity-input").forEach(input => {
         input.addEventListener("input", calculateTotals);
     });
+
+    function calculateTotalsAndValidate() {
+        let totalQuantity = 0;
+        let totalSales = 0;
+        let isValid = true;
+        const errorMessage = document.getElementById("error-message");
+        const submitButton = document.getElementById("submit-button");
+
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            const value = input.value;
+            const price = parseInt(input.getAttribute("data-price"));
+
+            if (value === "") return; // 空欄は許容
+
+            const quantity = parseInt(value);
+            if (isNaN(quantity) || quantity < 0) {
+                isValid = false;
+            } else {
+                totalQuantity += quantity;
+                totalSales += quantity * price;
+            }
+        });
+
+        document.getElementById("total-quantity").textContent = totalQuantity;
+        document.getElementById("total-sales").textContent = totalSales + " 円";
+
+        if (!isValid) {
+            errorMessage.textContent = "販売数には0以上の整数を入力してください。";
+            submitButton.disabled = true;
+        } else {
+            errorMessage.textContent = "";
+            submitButton.disabled = false;
+        }
+    }
+
+    document.querySelectorAll(".quantity-input").forEach(input => {
+        input.addEventListener("input", calculateTotalsAndValidate);
+    });
+
+    // 初期実行して念のためボタンを確実に無効化
+    window.addEventListener("DOMContentLoaded", calculateTotalsAndValidate);
 </script>
 
 </html>

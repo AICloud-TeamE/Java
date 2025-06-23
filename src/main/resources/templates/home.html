@@ -207,59 +207,60 @@
         }
 
         @media screen and (max-width: 768px) {
-  header {
-    font-size: 20px;
-    padding: 15px;
-  }
+            header {
+                font-size: 20px;
+                padding: 15px;
+            }
 
-  aside {
-    position: static;
-    width: 100%;
-    height: auto;
-    padding: 10px;
-    margin-bottom: 20px;
-  }
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
 
-  .content {
-    margin-left: 0;
-    padding: 10px;
-  }
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-  form label,
-  form select,
-  form button {
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 10px;
-  }
+            form label,
+            form select,
+            form button {
+                width: 100%;
+                max-width: 300px;
+                margin-bottom: 10px;
+            }
 
-  .calendar {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-  }
+            .calendar {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 6px;
+            }
 
-  .day {
-    font-size: 13px;
-    min-height: 100px;
-    word-wrap: break-word;
-  }
+            .day {
+                font-size: 13px;
+                min-height: 100px;
+                word-wrap: break-word;
+            }
 
-  .data {
-    font-size: 11px;
-    position: static;
-    margin-top: 6px;
-  }
+            .data {
+                font-size: 11px;
+                position: static;
+                margin-top: 6px;
+            }
 
-  .header {
-    display: none; /* 曜日表示を完全に非表示に */
-  }
-}
+            .header {
+                display: none;
+                /* 曜日表示を完全に非表示に */
+            }
+        }
     </style>
 
 </head>
@@ -340,11 +341,19 @@
                             <div class="data"
                                 th:if="${history.weather != null or history.highestTemperature != null or history.lowestTemperature != null or history.totalSales != null}">
                                 天気: <span th:text="${history.weather != null ? history.weather : '未記入'}"></span><br>
-                                最高: <span
-                                    th:text="${history.highestTemperature != null ? history.highestTemperature : '未記入'}"></span>°C<br>
-                                最低: <span
-                                    th:text="${history.lowestTemperature != null ? history.lowestTemperature : '未記入'}"></span>°C<br>
-                                売上: ¥<span th:text="${history.totalSales != null ? history.totalSales : '未記入'}"></span>
+
+                                最高:
+                                <span th:if="${history.highestTemperature != null}"
+                                    th:text="${history.highestTemperature + '°C'}"></span>
+                                <span th:unless="${history.highestTemperature != null}">未記入</span><br>
+
+                                最低:
+                                <span th:if="${history.lowestTemperature != null}"
+                                    th:text="${history.lowestTemperature + '°C'}"></span>
+                                <span th:unless="${history.lowestTemperature != null}">未記入</span><br>
+
+                                売上: ¥
+                                <span th:text="${history.totalSales != null ? history.totalSales : '未記入'}"></span>
                             </div>
                         </a>
                     </div>
