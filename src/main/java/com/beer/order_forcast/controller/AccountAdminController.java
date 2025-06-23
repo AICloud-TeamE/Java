@@ -89,6 +89,10 @@ public class AccountAdminController {
  
         
         // 登録処理 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
         Account account = new Account();
         account.setName(username);
         account.setEmail(email);

@@ -68,7 +68,22 @@
             align-items: center;
             margin-bottom: 20px;
         }
+<<<<<<< HEAD
  
+=======
+
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .week-buttons form {
+            display: inline;
+            margin: 0 5px;
+        }
+
+>>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
         .weather-day {
             text-align: left;
             width: 71px;
@@ -117,6 +132,7 @@
 </head>
  
 <body>
+<<<<<<< HEAD
 <header>発注予測システム</header>
 <div class="layout">
 <div>
@@ -156,6 +172,73 @@
             { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
         ];
  
+=======
+    <header>発注予測システム</header>
+    <div class="layout">
+        <div th:if="${isAdmin}">
+            <aside>
+                <ul>
+                    <li><strong>メニュー</strong></li>
+                    <li><a href="/forecast">需要予測</a></li>
+
+                    <li><a href="/sales_input">販売実績入力</a></li>
+
+                    <li><a href="/history_all">すべての販売実績と天気</a></li>
+                    <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                    <li><a href="/products">商品管理</a></li>
+                    <li><a href="/accounts">アカウント管理</a></li>
+                    <li><a href="/login">ログアウト</a></li>
+                </ul>
+            </aside>
+        </div>
+
+
+        <main class="main">
+            <div class="header">
+                <h2>週ごとの販売実績と天気</h2>
+            </div>
+
+
+            <div class="header-controls">
+                <h2>週ごとの販売実績と天気</h2>
+                <div class="week-buttons">
+                    <form method="get" action="/history_week">
+                        <input type="hidden" name="offset" th:value="${offset - 1}">
+                        <button type="submit">前週</button>
+                    </form>
+                    <form method="get" action="/history_week">
+                        <input type="hidden" name="offset" th:value="${offset + 1}">
+                        <button type="submit">翌週</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="weather-icons" id="weatherIcons"></div>
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </main>
+    </div>
+
+    <script th:inline="javascript">//zhang editted
+        //サンプルデータｔ        
+        //        const historyList = [
+        //            { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
+        //            { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
+        //            { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
+        //            { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
+        //            { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
+        //            { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
+        //        ];
+
+
+        //const historyList = /*[[${historyList}]]*/[];
+        const historyList = /*[[${historyList}]]*/ [];
+
+
+
+
+>>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
         const weatherIconMap = {
             sunny: 'fas fa-sun sunny',
             cloudy: 'fas fa-cloud cloudy',
@@ -166,13 +249,22 @@
         historyList.forEach(data => {
             const div = document.createElement('div');
             div.className = 'weather-day';
+<<<<<<< HEAD
  
             // ✅ 日別ページへのリンク付き
+=======
+            div.innerHTML = `<div>${data.date}</div><i class="${weatherIconMap[data.weather]} weather-icon-large"></i>`;
+
+>>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
             const link = document.createElement('a');
             link.href = `/history_date?date=${encodeURIComponent(data.date)}`;
             link.innerHTML = `<div>${data.date}</div><i class="${weatherIconMap[data.weather]} weather-icon-large"></i>`;
  
             div.appendChild(link);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 58f03ca4f092557532dd99f20aab3ccd31cbb953
             weatherIconsContainer.appendChild(div);
         });
  
@@ -180,7 +272,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: historyList.map(d => d.day),
+                labels: historyList.map(d => d.dayOfWeek),
                 datasets: [
                     {
                         label: '売上',
