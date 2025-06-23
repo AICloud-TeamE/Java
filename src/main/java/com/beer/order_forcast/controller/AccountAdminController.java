@@ -23,6 +23,15 @@ public class AccountAdminController {
         Integer userId = (Integer) session.getAttribute("userId");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
+        // ログイン画面へ
+        if (isAdmin == null) {
+        return "redirect:/login";
+        }
+
+        // 従業員はホームページへ
+        if (!isAdmin) {
+        return "redirect:/home";
+        }
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
@@ -38,7 +47,15 @@ public class AccountAdminController {
     }
 
     @GetMapping("/accounts/add")
-    public String showAddForm(Model model) {
+    public String showAddForm(HttpSession session,Model model) {
+      Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");  
+    if (isAdmin == null) {
+        return "redirect:/login";
+    }
+
+    if (!isAdmin) {
+        return "redirect:/home";
+    }
         model.addAttribute("account", new Account());
         return "account_add";
     }
@@ -119,6 +136,14 @@ public class AccountAdminController {
         System.out.println("Session ID: " + session.getId());
         System.out.println("isAdmin: " + session.getAttribute("isAdmin"));
         System.out.println("userId: " + session.getAttribute("userId"));
+        if (isAdmin == null) {
+        return "redirect:/login";
+        }
+
+        if (!isAdmin) {
+        return "redirect:/home";
+        }
+
         if (isAdmin == null || !isAdmin) {
             model.addAttribute("error", "管理者のみアクセス可能です。");
             return "error";
