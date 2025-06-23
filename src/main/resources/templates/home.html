@@ -45,8 +45,6 @@
             position: fixed;
             left: 0;
             height: 100%;
-            margin-top: 60px;
-            top: 0%;
         }
 
         aside ul {
@@ -284,11 +282,14 @@
                     <div class="day">
                         <a th:href="@{/history_date(date=${history.date})}">
                             <span th:text="${history.date}"></span>
-                            <div class="data">
-                                天気: <span th:text="${history.weather}"></span><br>
-                                最高: <span th:text="${history.highestTemperature}"></span>°C<br>
-                                最低: <span th:text="${history.lowestTemperature}"></span>°C<br>
-                                売上: ¥<span th:text="${history.totalSales}"></span>
+                            <div class="data"
+                                th:if="${history.weather != null or history.highestTemperature != null or history.lowestTemperature != null or history.totalSales != null}">
+                                天気: <span th:text="${history.weather != null ? history.weather : '未記入'}"></span><br>
+                                最高: <span
+                                    th:text="${history.highestTemperature != null ? history.highestTemperature : '未記入'}"></span>°C<br>
+                                最低: <span
+                                    th:text="${history.lowestTemperature != null ? history.lowestTemperature : '未記入'}"></span>°C<br>
+                                売上: ¥<span th:text="${history.totalSales != null ? history.totalSales : '未記入'}"></span>
                             </div>
                         </a>
                     </div>
