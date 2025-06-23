@@ -24,7 +24,7 @@ public class AccountService {
     public void softDeleteAccount(Integer id) {
         accountRepository.findById(id).ifPresent(account -> {
             account.setDeleted(true);
-            account.setAdmin(false);
+            account.setAdmin(null);
             accountRepository.save(account);
         });
     }
