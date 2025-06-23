@@ -164,6 +164,62 @@
             background-color: #FFA000;
             /* ホバー時の背景色を濃い黄色 (#FFA000) に変更 */
         }
+
+        @media screen and (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            header {
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                margin-top: 0;
+                padding: 10px;
+            }
+
+            .content {
+                margin-left: 0 !important;
+                padding: 15px;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+        }
+
+
+        table {
+            font-size: 14px;
+            table-layout: fixed;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        input.quantity-input {
+            width: 100%;
+            max-width: 80px;
+        }
+
+        .button-container {
+            justify-content: center;
+        }
+
+        button {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
