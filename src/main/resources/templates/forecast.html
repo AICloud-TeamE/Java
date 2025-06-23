@@ -180,7 +180,7 @@
 
         <!-- 発注対象日の表示 -->
         <div class="forecast-date" th:if="${isTodayOrderDay}"
-            th:text="'今日の発注日: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
+            th:text="'本日は発注日です: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
         </div>
 
         <div class="forecast-date" th:unless="${isTodayOrderDay}"
