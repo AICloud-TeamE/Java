@@ -1,11 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>アカウント編集</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* ===== 全体設定 ===== */
+
         body {
             background-color: white;
             font-family: Arial, sans-serif;
@@ -13,7 +16,9 @@
             padding: 0;
         }
 
+
         /* ===== ヘッダー ===== */
+
         header {
             background-color: #ffc107;
             color: black;
@@ -21,9 +26,18 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
         }
 
+        main {
+            margin-top: 20%;
+        }
+
+
         /* ===== サイドバー ===== */
+
         aside {
             background-color: #fff177;
             padding: 20px;
@@ -31,6 +45,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -56,7 +72,9 @@
             background-color: #FFD54F;
         }
 
+
         /* ===== メインコンテンツエリア ===== */
+
         .content {
             margin-left: 250px;
             padding: 20px;
@@ -75,7 +93,8 @@
             margin: 0 auto 30px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px 15px;
             border: 1px solid #000;
             font-size: 16px;
@@ -126,87 +145,77 @@
         .cancel-button:hover {
             background-color: #f0f0f0;
         }
+
+
+        /* ▼ エラーメッセージ用スタイル */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
+
 <body>
+    <header>発注予測システム</header>
 
-<header>発注予測システム</header>
+    <div th:if="${isAdmin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
 
-<div th:if="${isAdmin}">
-    <aside>
-        <ul>
-            <li><strong>メニュー</strong></li>
-            <li><a href="/forecast">需要予測</a></li>
-            <li><a href="/sales_input">需要実績入力</a></li>
-            <li><a href="/history_all">すべての販売実績と天気</a></li>
-            <li><a href="/history_week">週ごとの販売実績と天気</a></li>
-            <li><a href="/products">商品管理</a></li>
-            <li><a href="/accounts">アカウント管理</a></li>
-            <li><a href="/login">ログアウト</a></li>
-        </ul>
-    </aside>
-</div>
+                <li><a href="/sales_input">販売実績入力</a></li>
 
-<div class="content">
-    <h2>アカウント編集</h2>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
+    </div>
 
-    <form method="POST" th:action="@{/accounts/edit}" onsubmit="event.preventDefault(); updateAccount();">
-        <input type="hidden" name="_method" value="PUT" />
+    <div class="content">
+            <main>
+            <h2>アカウント編集</h2>
 
-        <table>
-            <tbody>
-                <tr>
-                    <td>氏名</td>
-                    <td><input type="text" name="username" th:value="${account.name}" required></td>
-                </tr>
-                <tr>
-                    <td>メールアドレス</td>
-                    <td><input type="email" name="email" th:value="${account.email}" required></td>
-                </tr>
-                <tr>
-                    <td>権限</td>
-                    <td>
-                        <select name="isAdmin">
-                            <option value="管理者" th:selected="${account.isAdmin == '管理者'}">管理者</option>
-                            <option value="一般" th:selected="${account.isAdmin == '一般'}">一般</option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <form method="POST" th:action="@{'/accounts/update/' + ${account.id}}">
+                <table>
+                    <tr>
+                        <td>氏名</td>
+                        <td><input type="text" name="username" th:value="${account.name}" required></td>
+                    </tr>
+                    <tr>
+                        <td>メールアドレス</td>
+                        <td><input type="email" name="email" th:value="${account.email}" required></td>
+                    </tr>
+                    <tr>
+                        <td>権限</td>
+                        <td>
+                            <select name="role">
+                                <option value="管理者" th:selected="${account.admin}">管理者</option>
+                                <option value="一般" th:selected="${!account.admin}">一般</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
 
-        <div class="button-group">
-            <button type="submit" class="save-button">変更を保存</button>
-            <button type="button" class="cancel-button" onclick="window.history.back();">キャンセル</button>
-        </div>
-    </form>
-</div>
+                <!-- ▼ エラーメッセージ表示 -->
+                <div th:if="${emailExistsError}" class="error-message">
+                    入力されたメールアドレスは既に使用されています。
+                </div>
 
-<script>
-    function updateAccount() {
-        const form = document.querySelector("form");
-        const formData = new FormData(form);
-        const data = {
-            username: formData.get("username"),
-            email: formData.get("email"),
-            isAdmin: formData.get("isAdmin")
-        };
+                <div class="button-group">
+                    <button type="submit" class="save-button">変更を保存</button>
+                    <button type="button" class="cancel-button" onclick="window.history.back();">キャンセル</button>
+                </div>
+            </form>
+    </main>
+    </div>
 
-        fetch(form.action, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.ok) {
-                alert("アカウントが更新されました");
-                window.location.href = "/accounts";
-            } else {
-                alert("更新に失敗しました");
-            }
-        });
-    }
-</script>
 
 </body>
+
 </html>

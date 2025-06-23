@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>需要予測</title>
@@ -21,6 +22,13 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 20%;
         }
 
         /* ===== サイドバー ===== */
@@ -31,6 +39,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -104,7 +114,8 @@
             margin-top: 10px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px 10px;
             border-bottom: 1px solid #ccc;
             text-align: center;
@@ -131,30 +142,35 @@
         }
     </style>
 </head>
+
 <body>
 
-<header>発注予測システム</header>
+    <header>発注予測システム</header>
 
-<div th:if="${isAdmin}">
-    <aside>
-        <ul>
-            <li><strong>メニュー</strong></li>
-            <li><a href="/forecast">需要予測</a></li>
-            <li><a href="/sales_input">需要実績入力</a></li>
-            <li><a href="/history_all">すべての販売実績と天気</a></li>
-            <li><a href="/history_week">週ごとの販売実績と天気</a></li>
-            <li><a href="/products">商品管理</a></li>
-            <li><a href="/accounts">アカウント管理</a></li>
-            <li><a href="/login">ログアウト</a></li>
-        </ul>
-    </aside>
-</div>
+    <div th:if="${isAdmin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
 
-<div class="content">
-    <h1>需要予測</h1>
-    <div class="header-info" id="year-display"></div>
+                <li><a href="/sales_input">販売実績入力</a></li>
 
-    <script>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <div class="content">
+        <main>
+            <h1>需要予測</h1>
+            <div class="header-info" id="year-display"></div>
+
+            <!-- 代わりにbackendがこちらに表示されるべき文字を提供しますedited by zhang -->
+            <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const year = new Date().getFullYear();
             document.getElementById('year-display').textContent = `${year}年`;
@@ -170,39 +186,50 @@
 
             forecastDateDiv.textContent = forecastLabel[dayOfWeek] || '';
         });
-    </script>
+    </script> -->
 
-    <!-- 発注対象日の表示 -->
-    <div class="forecast-date" id="forecast-date"></div>
+            <!-- 発注対象日の表示 -->
+            <div class="forecast-date" th:if="${isTodayOrderDay}"
+                th:text="'本日は発注日です: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
+            </div>
 
-    <!-- 商品別予測本数 -->
-    <div class="product-forecast">
-        <div th:each="entry : ${predictedDemandMap}">
-            <span th:text="${entry.key}">ビール名</span><br>
-            <span th:text="${entry.value + '本'}">0本</span>
-        </div>
+            <div class="forecast-date" th:unless="${isTodayOrderDay}"
+                th:text="'次回の発注日: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
+            </div>
+
+            <div class="forecast-date" th:text="${forecastLabel}">（予測対象日）</div>
+
+
+            <!-- 商品別予測本数 -->
+            <div class="product-forecast">
+                <div th:each="entry : ${predictedDemandMap}">
+                    <span th:text="${entry.key}">ビール名</span><br>
+                    <span th:text="${entry.value + '本'}">0本</span>
+                </div>
+            </div>
+
+            <!-- 次の7日間の天気と予測 -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>天気予報</th>
+                        <th>気温</th>
+                        <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="forecast : ${sevenDayForecastList}">
+                        <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
+                        <td th:text="${forecast.weather}">晴れ</td>
+                        <td th:text="${forecast.temperatureRange}">25〜30℃</td>
+                        <td th:each="entry : ${forecast.predictedDemandMap}" th:text="${entry.value + '本'}">0本</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
     </div>
 
-    <!-- 次の7日間の天気と予測 -->
-    <table>
-        <thead>
-            <tr>
-                <th>日付</th>
-                <th>天気予報</th>
-                <th>気温</th>
-                <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="forecast : ${sevenDayForecastList}">
-                <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
-                <td th:text="${forecast.weather}">晴れ</td>
-                <td th:text="${forecast.temperatureRange}">25〜30℃</td>
-                <td th:each="entry : ${forecast.predictedDemandMap}" th:text="${entry.value + '本'}">0本</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
 </body>
+
 </html>

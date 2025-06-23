@@ -12,6 +12,7 @@ import java.util.*;
 //servlet package
 import jakarta.servlet.http.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
 //springboot package
 // 控制器类注解
 import org.springframework.stereotype.Controller;
@@ -46,12 +47,10 @@ public class History_dayController {
         System.out.println("controller導入検査");
     }
 
-    @GetMapping("/history_day")
-    public String showHistoryWeekPage(
-            HttpSession session,
-            Model model,
-            @RequestParam(value = "year", required = false) Integer year,
-            @RequestParam(value = "month", required = false) Integer month) {
+    @GetMapping("/history_date")
+    public String showHistoryDayPage(
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            Model model, HttpSession session) {
 
         String name = (String) session.getAttribute("userName");
         Integer userId = (Integer) session.getAttribute("userId");
@@ -59,11 +58,27 @@ public class History_dayController {
 
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
-        model.addAttribute("is_admin", isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
 
+        System.out.println("history_dateロード検証");
 
-        
-        return "aaa";
+        SalesWeatherHistoryDTO dto = salesHistoryService.buildOneDaySalesWeatherDTO(date);
+        model.addAttribute("model", dto); //HTML 中用的就是 model.xxx
+        model.addAttribute("beerSales", dto.getProductSales());
+
+        return "history_day";
+    }
+
+    @PostMapping("/save")
+    public String saveHistoryDayEdit(
+        @RequestParam("name") String name,
+        @RequestParam("unit") Integer unit,
+        @RequestParam("price") Integer price,
+        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+        RedirectAttributes redirectAttributes
+    ){
+        redirectAttributes.addFlashAttribute("message",salesHistoryService.editHistoryOfDay(name,unit,price,date));
+        return "redirect:/history_date?date=" + date.toString();
     }
 
 }

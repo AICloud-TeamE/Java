@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>日ごとの販売実績と天気</title>
@@ -20,6 +21,13 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 20%;
         }
 
         aside {
@@ -29,6 +37,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -72,7 +82,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
@@ -125,7 +136,8 @@
             background-color: #45a049;
         }
 
-        input[type="number"], input[type="text"] {
+        input[type="number"],
+        input[type="text"] {
             width: 80px;
         }
 
@@ -134,126 +146,151 @@
         }
     </style>
 </head>
+
 <body>
 
-<header>発注予測システム</header>
+    <header>発注予測システム</header>
 
-<div th:if="${isAdmin}">
-    <aside>
-        <ul>
-            <li><strong>メニュー</strong></li>
-            <li><a href="/forecast">需要予測</a></li>
-            <li><a href="/sales_input">需要実績入力</a></li>
-            <li><a href="/history_all">すべての販売実績と天気</a></li>
-            <li><a href="/history_week">週ごとの販売実績と天気</a></li>
-            <li><a href="/products">商品管理</a></li>
-            <li><a href="/accounts">アカウント管理</a></li>
-            <li><a href="/login">ログアウト</a></li>
-        </ul>
-    </aside>
-</div>
+    <div th:if="${isAdmin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
 
-<div class="content">
-    <!-- ✅ タイトルを本文に表示 -->
-    <h1>日ごとの販売実績と天気）</h1>
+                <li><a href="/sales_input">販売実績入力</a></li>
 
-    <div class="header-section">
-        <div class="date-info">
-            <span id="date"></span>（<span id="dayOfWeek"></span>）
-        </div>
-
-        <div class="weather-info">
-            <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
-            <div>
-                <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
-                <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
-            </div>
-        </div>
-
-        <div class="editor-info">
-            編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span th:text="${model.editor}">--</span>
-        </div>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
     </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>商品名</th>
-            <th>価格（円）</th>
-            <th>販売本数</th>
-            <th>売上（円）</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
-            <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
-            <td>
-                <span th:text="${beer.price}"></span>
-                <input type="number" th:value="${beer.price}" style="display:none;">
-            </td>
-            <td>
-                <span th:text="${beer.unit}"></span>
-                <input type="number" th:value="${beer.unit}" style="display:none;">
-            </td>
-            <td>
-                <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
-                <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;">
-            </td>
-            <td>
-                <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="content">
+        <!-- ✅ タイトルを本文に表示 -->
+        <main>
+            <h1>日ごとの販売実績と天気）</h1>
 
-    <form id="editForm" method="post" action="/save">
-        <input type="hidden" name="name">
-        <input type="hidden" name="price">
-        <input type="hidden" name="unit">
-        <input type="hidden" name="revenue">
-    </form>
-</div>
+            <div class="header-section">
+                <div class="date-info">
+                    <span th:text="${model.date}"></span>（<span th:text="${model.dayOfWeek}"></span>）
+                    <!--ここもともとはページを見る時点の日付を表示するようになっちゃった、↑のように編集したbyチョウ-->
+                    <!-- <span id="date"></span>（<span id="dayOfWeek"></span>） -->
+                </div>
 
-<script>
-    // 日付と曜日を表示
-    const date = new Date();
-    document.getElementById("date").textContent = date.toLocaleDateString();
-    document.getElementById("dayOfWeek").textContent = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+                <div class="weather-info">
+                    <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
+                    <div>
+                        <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
+                        <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
+                    </div>
+                </div>
 
-    // 編集モード切り替え
-    function toggleEdit(button) {
-        const row = button.closest('tr');
-        const inputs = row.querySelectorAll('input');
-        const spans = row.querySelectorAll('span');
-        const isEditing = button.textContent === '保存';
+                <div class="editor-info">
+                    編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span
+                        th:text="${model.editor}">--</span>
+                </div>
+            </div>
 
-        inputs.forEach(input => input.style.display = isEditing ? 'none' : 'inline-block');
-        spans.forEach(span => span.style.display = isEditing ? 'inline' : 'none');
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>価格（円）</th>
+                        <th>販売本数</th>
+                        <th>売上（円）</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
+                        <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
+                        <td th:attr="data-price=${beer.price}">
+                            <!-- zhang edited: at the present, the historical price is not designed to be saved in any table-->
+                            <!-- zhang edited: it is actually calculated by unit and revenue-->
+                            <!-- zhang edited: therefore しばらくunitだけを編集可能にします-->
+                            <span th:text="${beer.price}"></span>
+                            <!-- <input type="number" th:value="${beer.price}" style="display:none;"> -->
+                        </td>
+                        <td>
+                            <span th:text="${beer.unit}"></span>
+                            <input type="number" th:value="${beer.unit}" name="unit" min="0" max="9999" required
+                                style="display:none;">
+                        </td>
+                        <td>
+                            <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
+                            <!-- <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;"> -->
+                        </td>
+                        <td>
+                            <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        if (isEditing) {
-            const price = parseInt(row.cells[1].querySelector('input').value) || 0;
-            const unit = parseInt(row.cells[2].querySelector('input').value) || 0;
-            const revenue = parseInt(row.cells[3].querySelector('input').value) || 0;
-            const name = row.querySelector('td[data-name]').getAttribute('data-name');
+            <form id="editForm" method="post" action="/save">
+                <input type="hidden" name="name">
+                <input type="hidden" name="price">
 
-            row.cells[1].querySelector('span').textContent = price;
-            row.cells[2].querySelector('span').textContent = unit;
-            row.cells[3].querySelector('span').textContent = revenue;
+                <input type="hidden" name="unit">
+                <!-- <input type="hidden" name="revenue"> -->
+                <!-- 商品name追加 -->
+                <input type="hidden" name="date" th:value="${model.date}">
 
-            const form = document.getElementById('editForm');
-            form.elements['name'].value = name;
-            form.elements['price'].value = price;
-            form.elements['unit'].value = unit;
-            form.elements['revenue'].value = revenue;
+            </form>
+        </main>
+    </div>
 
-            form.submit();
-            button.textContent = '編集';
-        } else {
-            button.textContent = '保存';
+    <script>
+        // 日付と曜日を表示
+        //ここもともとはページを見る時点の日付を表示するようになっちゃった、元の内容をannotationしたbyチョウ
+        //const date = new Date();
+        //document.getElementById("date").textContent = date.toLocaleDateString();
+        //document.getElementById("dayOfWeek").textContent = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+
+        // 編集モード切り替え
+        function toggleEdit(button) {
+            const row = button.closest('tr');
+            const isEditing = button.textContent === '保存';
+
+            // 只对 unit（有 input 的字段）做隐藏显示
+            const unitSpan = row.cells[2].querySelector('span');
+            const unitInput = row.cells[2].querySelector('input');
+
+            if (isEditing) {
+                const unit = parseInt(unitInput.value) || 0;
+                unitSpan.textContent = unit;
+                unitSpan.style.display = 'inline';
+                unitInput.style.display = 'none';
+
+                const name = row.querySelector('td[data-name]').getAttribute('data-name');
+                const form = document.getElementById('editForm');
+                form.elements['name'].value = name;
+                form.elements['unit'].value = unit;
+                const price = parseInt(row.cells[1].getAttribute("data-price")) || 0;
+                form.elements['price'].value = price;
+
+
+                form.submit();
+                button.textContent = '編集';
+            } else {
+                unitSpan.style.display = 'none';
+                unitInput.style.display = 'inline-block';
+                button.textContent = '保存';
+            }
         }
-    }
-</script>
+        //message 弹窗表示
+        window.addEventListener("DOMContentLoaded", function () {
+            /* Spring 的 flash message（如保存成功） */
+            const message = /*[[${message}]]*/ "";
+            if (message !== "") {
+                alert(message);
+            }
+        });
+    </script>
 
 </body>
+
 </html>

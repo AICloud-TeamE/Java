@@ -72,15 +72,40 @@ public class History_allController {
         model.addAttribute("selectedYear", year);
         model.addAttribute("selectedMonth", month);
 
-
-        
-
-        //真实参数取得，需修改数据库！！！！
+        // 真实参数取得，需修改数据库！！！！
         List<SalesHistory> salesHistoryList = salesHistoryService.findAll();
         // 或按年月筛选的结果
 
-        //需补充
-        model.addAttribute("historyList", salesHistoryService.getSalesWeatherByMonth(year,month));
+        // 需补充
+        model.addAttribute("historyList", salesHistoryService.getSalesWeatherByMonth(year, month));
+
+        Map<String, Integer> dowMap = new HashMap<>();
+        dowMap.put("月", 0);
+        dowMap.put("火", 1);
+        dowMap.put("水", 2);
+        dowMap.put("木", 3);
+        dowMap.put("金", 4);
+        dowMap.put("土", 5);
+        // dowMap.put("日", 6);
+        // 獲得該月第一天
+        LocalDate firstDateOfMonth = LocalDate.of(year, month, 1);
+        String firstDowStr = salesHistoryService.getJapaneseShortWeekday(firstDateOfMonth.getDayOfWeek());
+        System.out.println("firstDowStr = " + firstDowStr); //
+        // model.addAttribute("firstDayOfWeek", firstDowStr);
+
+        int blankCount = switch (firstDateOfMonth.getDayOfWeek()) {
+            case MONDAY -> 0;
+            case TUESDAY -> 1;
+            case WEDNESDAY -> 2;
+            case THURSDAY -> 3;
+            case FRIDAY -> 4;
+            case SATURDAY -> 5;
+            case SUNDAY -> 0;
+            default -> -1; // SUNDAY -> 不显示
+        };
+        model.addAttribute("blankCount", blankCount);
+
+        model.addAttribute("dowMap", dowMap);
 
         return "home";
 

@@ -19,36 +19,34 @@
         }
 
         /* ===== ヘッダー ===== */
+
         header {
             background-color: #ffc107;
-            /* ヘッダー背景を黄色系に設定 */
             color: black;
-            /* 文字色を黒に設定 */
             padding: 20px;
-            /* 上下左右の内側余白を20pxに設定 */
             font-size: 24px;
-            /* フォントサイズを24pxに設定 */
             text-align: center;
-            /* 中央揃えに */
             font-weight: bold;
-            /* 太字に設定 */
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 60px;
+            top: 0%;
         }
 
         /* ===== サイドバー ===== */
         aside {
             background-color: #fff177;
-            /* 背景色を淡い黄色に */
             padding: 20px;
-            /* 内側余白 */
             width: 200px;
-            /* 固定幅 */
             position: fixed;
-            /* スクロールしても位置固定 */
-
             left: 0;
-            /* 左端に配置 */
             height: 100%;
-            /* 高さを画面全体に */
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -221,7 +219,9 @@
             <ul>
                 <li><strong>メニュー</strong></li>
                 <li><a href="/forecast">需要予測</a></li>
-                <li><a href="/sales_input">需要実績入力</a></li>
+
+                <li><a href="/sales_input">販売実績入力</a></li>
+
                 <li><a href="/history_all">すべての販売実績と天気</a></li>
                 <li><a href="/history_week">週ごとの販売実績と天気</a></li>
                 <li><a href="/products">商品管理</a></li>
@@ -231,47 +231,70 @@
         </aside>
     </div>
 
+
     <div class="content">
-        <h1>天気と売上カレンダー</h1>
+        <main>
+            <h1>天気と売上カレンダー</h1>
 
-        <form method="get" action="/home">
-            <label for="year">年:</label>
-            <select id="year" name="year">
-                <option th:each="y : ${years}" th:value="${y}" th:text="${y}" th:selected="${y == selectedYear}">
-                </option>
-            </select>
+            <form method="get" action="/history_all">
 
-            <label for="month">月:</label>
-            <select id="month" name="month">
-                <option th:each="m : ${months}" th:value="${m}" th:text="${m}" th:selected="${m == selectedMonth}">
-                </option>
-            </select>
+                <label for="year">年:</label>
+                <select id="year" name="year">
+                    <option th:each="y : ${years}" th:value="${y}" th:text="${y}" th:selected="${y == selectedYear}">
+                    </option>
+                </select>
 
-            <button type="submit">表示</button>
-        </form>
+                <label for="month">月:</label>
+                <select id="month" name="month">
+                    <option th:each="m : ${months}" th:value="${m}" th:text="${m}" th:selected="${m == selectedMonth}">
+                    </option>
+                </select>
 
-        <div class="calendar">
-            <div class="header">月</div>
-            <div class="header">火</div>
-            <div class="header">水</div>
-            <div class="header">木</div>
-            <div class="header">金</div>
-            <div class="header">土</div>
+                <button type="submit">表示</button>
+            </form>
 
-            <th:block th:each="history : ${historyList}">
-                <div class="day">
-                    <a th:href="@{/history_date(date=${history.date})}">
-                        <span th:text="${history.date}"></span>
-                        <div class="data">
-                            天気: <span th:text="${history.weather}"></span><br>
-                            最高: <span th:text="${history.highestTemperature}"></span>°C<br>
-                            最低: <span th:text="${history.lowestTemperature}"></span>°C<br>
-                            売上: ¥<span th:text="${history.totalSales}"></span>
-                        </div>
-                    </a>
-                </div>
-            </th:block>
-        </div>
+            <div class="calendar">
+
+                <!-- 曜日ヘッダ -->
+
+                <div class="header">月</div>
+                <div class="header">火</div>
+                <div class="header">水</div>
+                <div class="header">木</div>
+                <div class="header">金</div>
+                <div class="header">土</div>
+
+
+                <!-- 空白セルの挿入 -->
+                <!-- <th:block th:with="dowMap=${{'月': 0, '火': 1, '水': 2, '木': 3, '金': 4, '土': 5}}"> -->
+                <!-- backend直接DOMAP作成 -->
+                <th:block th:if="${historyList.size() > 0}">
+                    <th:block th:if="${blankCount > 0}">
+                        <th:block th:each="i : ${#numbers.sequence(1, blankCount)}">
+                            <div class="day"></div>
+                        </th:block>
+                    </th:block>
+                </th:block>
+                </th:block>
+                <!-- </th:block> -->
+
+                <!-- 実データの出力 -->
+
+                <th:block th:each="history : ${historyList}">
+                    <div class="day">
+                        <a th:href="@{/history_date(date=${history.date})}">
+                            <span th:text="${history.date}"></span>
+                            <div class="data">
+                                天気: <span th:text="${history.weather}"></span><br>
+                                最高: <span th:text="${history.highestTemperature}"></span>°C<br>
+                                最低: <span th:text="${history.lowestTemperature}"></span>°C<br>
+                                売上: ¥<span th:text="${history.totalSales}"></span>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </main>
     </div>
 </body>
 

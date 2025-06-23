@@ -37,7 +37,8 @@ public class FunctionTestController {
                 entity,
                 String.class
         );
-        // String response = restTemplate.getForObject(functionUrl, String.class);
+        
+
 
         return response; // 打印对方返回的数据
     }

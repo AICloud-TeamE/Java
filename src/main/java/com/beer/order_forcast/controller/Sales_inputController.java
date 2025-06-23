@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 //function package
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 
 //springboot package
@@ -48,6 +49,13 @@ public class Sales_inputController {
         System.out.println("controller導入検査");
     }
 
+    // 業務日付判断
+    private LocalDate getBusinessDate() {
+        LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now();
+        return now.isBefore(LocalTime.of(17, 0)) ? today.minusDays(1) : today;
+    }
+
     @GetMapping("/sales_input")
     public String showSalesInputPage(
             HttpSession session,
@@ -62,6 +70,9 @@ public class Sales_inputController {
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
         model.addAttribute("isAdmin", isAdmin);
+
+        LocalDate businessDate = getBusinessDate();
+        model.addAttribute("businessDate", businessDate);
 
         model.addAttribute("beerList", productService.findAllActiveProducts());
         return "sales_input";
@@ -88,9 +99,10 @@ public class Sales_inputController {
         // return "redirect:/sales_input";
         // }
         // }
-        
 
-        LocalDate today = LocalDate.now();
+        // 营业日而非自然日
+        LocalDate businessDate = getBusinessDate();
+
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
 
         for (Map.Entry<String, String> entry : form.entrySet()) {
@@ -109,7 +121,7 @@ public class Sales_inputController {
                     sh.setProduct_id(productId);
                     sh.setCreator_id(userId);
                     sh.setUpdate_id(userId);
-                    sh.setDate(today);
+                    sh.setDate(businessDate);
                     sh.setSales_count(count);
                     sh.setSales_revenue(revenue);
                     sh.setCreated_at(now);
