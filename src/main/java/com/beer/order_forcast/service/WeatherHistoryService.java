@@ -45,7 +45,7 @@ public class WeatherHistoryService {
 
 
     //
-    @Scheduled(cron = "0 0 2 * * *") // 每天凌晨2点执行
+    @Scheduled(cron = "0 0 19 * * *") // 每天凌晨2点执行
     public void fetchAndSaveYesterdayWeather() {
         String url = "";
 

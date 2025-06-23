@@ -239,18 +239,18 @@
 
     <script th:inline="javascript">//zhang editted
         //サンプルデータｔ        
-        const historyList = [
-            { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
-            { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
-            { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
-            { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
-            { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
-            { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
-        ];
+        //const historyList = [
+        //    { day: '月', date: '6月10日', weather: 'sunny', highestTemperature: 31.5, lowestTemperature: 25.8, totalSales: 45000 },
+        //    { day: '火', date: '6月11日', weather: 'cloudy', highestTemperature: 28.0, lowestTemperature: 23.5, totalSales: 38000 },
+        //    { day: '水', date: '6月12日', weather: 'rainy', highestTemperature: 24.5, lowestTemperature: 20.0, totalSales: 25000 },
+        //    { day: '木', date: '6月13日', weather: 'sunny', highestTemperature: 30.0, lowestTemperature: 26.2, totalSales: 55000 },
+        //    { day: '金', date: '6月14日', weather: 'cloudy', highestTemperature: 27.5, lowestTemperature: 22.0, totalSales: 42000 },
+        //    { day: '土', date: '6月15日', weather: 'sunny', highestTemperature: 32.0, lowestTemperature: 27.5, totalSales: 60000 },
+        //];
 
 
-        //const historyList = /*[[${historyList}]]*/[];
-        //const historyList = /*[[${historyList}]]*/ [];
+        const historyList = /*[[${historyList}]]*/ [];
+
 
 
 
@@ -278,7 +278,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: historyList.map(d => d.day),
+                labels: historyList.map(d => d.dayOfWeek),
                 datasets: [
                     {
                         label: '売上',
