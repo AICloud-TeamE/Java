@@ -144,6 +144,72 @@
         input[type="text"] {
             width: 100px;
         }
+
+        @media screen and (max-width: 768px) {
+            header {
+                font-size: 20px;
+                padding: 15px;
+            }
+
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                margin-top: 0;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            th,
+            td {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                background-color: #f9f9f9;
+                border-radius: 6px;
+            }
+
+            td {
+                text-align: left;
+                padding: 8px;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .table-edit-button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -171,7 +237,7 @@
     <div class="content">
         <!-- ✅ タイトルを本文に表示 -->
         <main>
-            <h1>日ごとの販売実績と天気）</h1>
+            <h1>日ごとの販売実績と天気</h1>
 
             <div class="header-section">
                 <div class="date-info">
@@ -206,24 +272,19 @@
                 </thead>
                 <tbody>
                     <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
-                        <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
-                        <td th:attr="data-price=${beer.price}">
-                            <!-- zhang edited: at the present, the historical price is not designed to be saved in any table-->
-                            <!-- zhang edited: it is actually calculated by unit and revenue-->
-                            <!-- zhang edited: therefore しばらくunitだけを編集可能にします-->
+                        <td data-label="商品名" th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
+                        <td data-label="価格（円）" th:attr="data-price=${beer.price}">
                             <span th:text="${beer.price}"></span>
-                            <!-- <input type="number" th:value="${beer.price}" style="display:none;"> -->
                         </td>
-                        <td>
+                        <td data-label="販売本数">
                             <span th:text="${beer.unit}"></span>
                             <input type="number" th:value="${beer.unit}" name="unit" min="0" max="9999" required
                                 style="display:none;">
                         </td>
-                        <td>
+                        <td data-label="売上（円）">
                             <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
-                            <!-- <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;"> -->
                         </td>
-                        <td>
+                        <td data-label="操作">
                             <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
                         </td>
                     </tr>

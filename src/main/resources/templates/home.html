@@ -205,6 +205,61 @@
             color: #333;
             /* 文字色を濃いグレーに */
         }
+
+        @media screen and (max-width: 768px) {
+  header {
+    font-size: 20px;
+    padding: 15px;
+  }
+
+  aside {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  form label,
+  form select,
+  form button {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 10px;
+  }
+
+  .calendar {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .day {
+    font-size: 13px;
+    min-height: 100px;
+    word-wrap: break-word;
+  }
+
+  .data {
+    font-size: 11px;
+    position: static;
+    margin-top: 6px;
+  }
+
+  .header {
+    display: none; /* 曜日表示を完全に非表示に */
+  }
+}
     </style>
 
 </head>
