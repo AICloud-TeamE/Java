@@ -172,30 +172,28 @@
 <div class="content">
     <h2>アカウント編集</h2>
 
-    <form method="POST" th:action="@{/accounts/edit}" onsubmit="event.preventDefault(); updateAccount();">
-        <input type="hidden" name="_method" value="PUT" />
-
+   
+        <form method="POST" th:action="@{'/accounts/update/' + ${account.id}}">
         <table>
-            <tbody>
-                <tr>
-                    <td>氏名</td>
-                    <td><input type="text" name="username" th:value="${account.name}" required></td>
-                </tr>
-                <tr>
-                    <td>メールアドレス</td>
-                    <td><input type="email" name="email" th:value="${account.email}" required></td>
-                </tr>
-                <tr>
-                    <td>権限</td>
-                    <td>
-                        <select name="isAdmin">
-                            <option value="管理者" th:selected="${account.isAdmin == '管理者'}">管理者</option>
-                            <option value="一般" th:selected="${account.isAdmin == '一般'}">一般</option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
+            <tr>
+                <td>氏名</td>
+                <td><input type="text" name="username" th:value="${account.name}" required></td>
+            </tr>
+            <tr>
+                <td>メールアドレス</td>
+                <td><input type="email" name="email" th:value="${account.email}" required></td>
+            </tr>
+            <tr>
+                <td>権限</td>
+                <td>
+                    <select name="role">
+                        <option value="管理者" th:selected="${account.admin}">管理者</option>
+                        <option value="一般" th:selected="${!account.admin}">一般</option>
+                    </select>
+                </td>
+            </tr>
         </table>
+
 
 
         <!-- ▼ エラーメッセージ表示 -->
