@@ -21,6 +21,13 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 20%;
         }
 
         aside {
@@ -30,6 +37,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -161,74 +170,77 @@
 
     <div class="content">
         <!-- ✅ タイトルを本文に表示 -->
-        <h1>日ごとの販売実績と天気）</h1>
+        <main>
+            <h1>日ごとの販売実績と天気）</h1>
 
-        <div class="header-section">
-            <div class="date-info">
-                <span th:text="${model.date}"></span>（<span th:text="${model.dayOfWeek}"></span>）
-                <!--ここもともとはページを見る時点の日付を表示するようになっちゃった、↑のように編集したbyチョウ-->
-                <!-- <span id="date"></span>（<span id="dayOfWeek"></span>） -->
-            </div>
+            <div class="header-section">
+                <div class="date-info">
+                    <span th:text="${model.date}"></span>（<span th:text="${model.dayOfWeek}"></span>）
+                    <!--ここもともとはページを見る時点の日付を表示するようになっちゃった、↑のように編集したbyチョウ-->
+                    <!-- <span id="date"></span>（<span id="dayOfWeek"></span>） -->
+                </div>
 
-            <div class="weather-info">
-                <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
-                <div>
-                    <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
-                    <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
+                <div class="weather-info">
+                    <img th:src="@{/images/weather_icon.png}" alt="天気アイコン" />
+                    <div>
+                        <div>最高気温: <span th:text="${model.highestTemperature}">--</span>℃</div>
+                        <div>最低気温: <span th:text="${model.lowestTemperature}">--</span>℃</div>
+                    </div>
+                </div>
+
+                <div class="editor-info">
+                    編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span
+                        th:text="${model.editor}">--</span>
                 </div>
             </div>
 
-            <div class="editor-info">
-                編集日時: <span th:text="${model.editHistory}">--</span> / 編集者: <span th:text="${model.editor}">--</span>
-            </div>
-        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>価格（円）</th>
+                        <th>販売本数</th>
+                        <th>売上（円）</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
+                        <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
+                        <td th:attr="data-price=${beer.price}">
+                            <!-- zhang edited: at the present, the historical price is not designed to be saved in any table-->
+                            <!-- zhang edited: it is actually calculated by unit and revenue-->
+                            <!-- zhang edited: therefore しばらくunitだけを編集可能にします-->
+                            <span th:text="${beer.price}"></span>
+                            <!-- <input type="number" th:value="${beer.price}" style="display:none;"> -->
+                        </td>
+                        <td>
+                            <span th:text="${beer.unit}"></span>
+                            <input type="number" th:value="${beer.unit}" name="unit" min="0" max="9999" required
+                                style="display:none;">
+                        </td>
+                        <td>
+                            <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
+                            <!-- <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;"> -->
+                        </td>
+                        <td>
+                            <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>商品名</th>
-                    <th>価格（円）</th>
-                    <th>販売本数</th>
-                    <th>売上（円）</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="beer, iterStat : ${beerSales}" th:attr="data-index=${iterStat.index}">
-                    <td th:text="${beer.name}" th:attr="data-name=${beer.name}"></td>
-                    <td th:attr="data-price=${beer.price}">
-                        <!-- zhang edited: at the present, the historical price is not designed to be saved in any table-->
-                        <!-- zhang edited: it is actually calculated by unit and revenue-->
-                        <!-- zhang edited: therefore しばらくunitだけを編集可能にします-->
-                        <span th:text="${beer.price}"></span>
-                        <!-- <input type="number" th:value="${beer.price}" style="display:none;"> -->
-                    </td>
-                    <td>
-                        <span th:text="${beer.unit}"></span>
-                        <input type="number" th:value="${beer.unit}" name="unit" min="0" max="9999" required
-                            style="display:none;">
-                    </td>
-                    <td>
-                        <span th:text="${beer.revenue} ?: ${beer.price * beer.unit}"></span>
-                        <!-- <input type="number" th:value="${beer.revenue} ?: ${beer.price * beer.unit}" style="display:none;"> -->
-                    </td>
-                    <td>
-                        <button type="button" class="table-edit-button" onclick="toggleEdit(this)">編集</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <form id="editForm" method="post" action="/save">
+                <input type="hidden" name="name">
+                <input type="hidden" name="price">
 
-        <form id="editForm" method="post" action="/save">
-            <input type="hidden" name="name">
-            <input type="hidden" name="price">
+                <input type="hidden" name="unit">
+                <!-- <input type="hidden" name="revenue"> -->
+                <!-- 商品name追加 -->
+                <input type="hidden" name="date" th:value="${model.date}">
 
-            <input type="hidden" name="unit">
-            <!-- <input type="hidden" name="revenue"> -->
-            <!-- 商品name追加 -->
-            <input type="hidden" name="date" th:value="${model.date}">
-
-        </form>
+            </form>
+        </main>
     </div>
 
     <script>

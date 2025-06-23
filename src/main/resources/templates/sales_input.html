@@ -21,40 +21,33 @@
         }
 
         /* ===== ヘッダーのデザイン ===== */
-
-        /* ヘッダー部分のスタイルを設定 */
         header {
             background-color: #ffc107;
-            /* ヘッダーの背景色を黄色系 (#FFC107) に設定 */
             color: black;
-            /* 文字色を黒に設定 */
             padding: 20px;
-            /* 内側の余白を20pxに設定 */
             font-size: 24px;
-            /* フォントサイズを24pxに設定 */
             text-align: center;
-            /* テキストを中央揃えにする */
             font-weight: bold;
-            /* フォントを太字にする */
+            position: fixed;
+            width: 100%;
+            z-index: 100;
         }
 
-        /* ===== サイドバーのデザイン ===== */
+        main {
+            margin-top: 100px;
+            top: 0%;
+        }
 
-        /* サイドバーのレイアウト設定 */
+        /* ===== サイドバー ===== */
         aside {
             background-color: #fff177;
-            /* サイドバーの背景色を明るい黄色 (#FFF177) に設定 */
             padding: 20px;
-            /* 内側の余白を20pxに設定 */
             width: 200px;
-            /* 幅を220pxに設定 */
             position: fixed;
-            /* 画面の左側に固定表示 */
-            /*top: 0; /* 上端からの距離を0pxに設定 */
             left: 0;
-            /* 左端からの距離を0pxに設定 */
             height: 100%;
-            /* 高さを画面いっぱいに設定 */
+            margin-top: 60px;
+            top: 0%;
         }
 
         /* サイドバーのリストデザイン */
@@ -193,50 +186,52 @@
     </aside>
 
     <div class="content">
-        <div id="date-display"></div>
+        <main>
+            <div id="date-display"></div>
 
 
-        <!-- 追加营业日显示 -->
-        <p>本日（営業日）: <span th:text="${#temporals.format(businessDate, 'M月d日(E)')}"></span></p>
+            <!-- 追加营业日显示 -->
+            <p>本日（営業日）: <span th:text="${#temporals.format(businessDate, 'M月d日(E)')}"></span></p>
 
 
-        <form action="/sales_input" method="post">
-            <table>
-                <thead>
+            <form action="/sales_input" method="post">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>商品名</th>
+                            <th>商品単価（円）</th>
+                            <th>販売数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="beer : ${beerList}">
+                            <td th:text="${beer.name}"></td>
+                            <td th:text="${beer.price}"></td>
+                            <td>
+                                <input type="number" class="quantity-input" th:data-price="${beer.price}" min="0"
+                                    th:name="'input' + ${beer.id}">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>集計結果</h2>
+                <table>
                     <tr>
-                        <th>商品名</th>
-                        <th>商品単価（円）</th>
-                        <th>販売数</th>
+                        <th>合計販売本数</th>
+                        <td id="total-quantity">0</td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="beer : ${beerList}">
-                        <td th:text="${beer.name}"></td>
-                        <td th:text="${beer.price}"></td>
-                        <td>
-                            <input type="number" class="quantity-input" th:data-price="${beer.price}" min="0"
-                                th:name="'input' + ${beer.id}">
-                        </td>
+                    <tr>
+                        <th>合計売上金額</th>
+                        <td id="total-sales">0 円</td>
                     </tr>
-                </tbody>
-            </table>
+                </table>
 
-            <h2>集計結果</h2>
-            <table>
-                <tr>
-                    <th>合計販売本数</th>
-                    <td id="total-quantity">0</td>
-                </tr>
-                <tr>
-                    <th>合計売上金額</th>
-                    <td id="total-sales">0 円</td>
-                </tr>
-            </table>
-
-            <div class="button-container">
-                <button type="submit">登録</button>
-            </div>
-        </form>
+                <div class="button-container">
+                    <button type="submit">登録</button>
+                </div>
+            </form>
+        </main>
     </div>
 </body>
 

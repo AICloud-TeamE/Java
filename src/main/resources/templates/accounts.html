@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>アカウント管理</title>
@@ -21,6 +22,13 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 20%;
         }
 
         /* ===== サイドバー ===== */
@@ -31,6 +39,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -113,7 +123,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
@@ -128,70 +139,73 @@
         }
     </style>
 </head>
+
 <body>
 
-<header>発注予測システム</header>
+    <header>発注予測システム</header>
 
-<div th:if="${isAdmin}">
-    <aside>
-        <ul>
-            <li><strong>メニュー</strong></li>
-            <li><a href="/forecast">需要予測</a></li>
+    <div th:if="${isAdmin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
 
-            <li><a href="/sales_input">販売実績入力</a></li>
+                <li><a href="/sales_input">販売実績入力</a></li>
 
-            <li><a href="/history_all">すべての販売実績と天気</a></li>
-            <li><a href="/history_week">週ごとの販売実績と天気</a></li>
-            <li><a href="/products">商品管理</a></li>
-            <li><a href="/accounts">アカウント管理</a></li>
-            <li><a href="/login">ログアウト</a></li>
-        </ul>
-    </aside>
-</div>
-
-<div class="content">
-    <div class="header-bar">
-        <h2>アカウント管理</h2>
-        <button class="add-button" onclick="location.href='/accounts/add'">アカウント追加</button>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
     </div>
 
-    
+    <div class="content">
+        <main>
+            <div class="header-bar">
+                <h2>アカウント管理</h2>
+                <button class="add-button" onclick="location.href='/accounts/add'">アカウント追加</button>
+            </div>
 
 
 
-    <table>
-        <thead>
-            <tr>
-                <th>氏名</th>
-                <th>アカウントID</th>
-                <th>パスワード</th>
-                <th>権限</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="account : ${accounts}">
-                <td th:text="${account.name}">山田太郎</td>
-                <td th:text="${account.email}">yamada@example.com</td>
-                <td th:text="${account.password}">password</td>
-                <td th:text="${account.isAdmin} ? '管理者' : '従業員'">従業員</td>
-                <td>
 
 
-                    <button class="action-button"
-                            th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>氏名</th>
+                        <th>アカウントID</th>
+                        <th>パスワード</th>
+                        <th>権限</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="account : ${accounts}">
+                        <td th:text="${account.name}">山田太郎</td>
+                        <td th:text="${account.email}">yamada@example.com</td>
+                        <td th:text="${account.password}">password</td>
+                        <td th:text="${account.isAdmin} ? '管理者' : '従業員'">従業員</td>
+                        <td>
 
-                    <form th:action="@{/accounts/delete}" method="post" style="display:inline;">
-                        <input type="hidden" name="id" th:value="${account.id}" />
-                        <button class="action-button"
-                                type="submit"
-                                onclick="return confirm('本当にこのアカウントを削除しますか？');">削除</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+                            <button class="action-button"
+                                th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
+
+                            <form th:action="@{/accounts/delete}" method="post" style="display:inline;">
+                                <input type="hidden" name="id" th:value="${account.id}" />
+                                <button class="action-button" type="submit"
+                                    onclick="return confirm('本当にこのアカウントを削除しますか？');">削除</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
 
 </body>
+
 </html>
