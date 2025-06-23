@@ -22,6 +22,13 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 20%;
         }
 
         /* ===== サイドバー ===== */
@@ -32,6 +39,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -131,6 +140,140 @@
         button:hover {
             background-color: #FFA000;
         }
+
+        @media screen and (max-width: 768px) {
+            header {
+                font-size: 20px;
+                padding: 15px;
+            }
+
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                margin-top: 0;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .product-forecast {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+
+            td {
+                text-align: left;
+                padding: 8px;
+                border: none;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .forecast-date,
+            .header-info {
+                font-size: 16px;
+                margin: 10px 0;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            header {
+                font-size: 20px;
+                padding: 15px;
+            }
+
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                margin-top: 0;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .product-forecast {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+
+            td {
+                text-align: left;
+                padding: 8px;
+                border: none;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .forecast-date,
+            .header-info {
+                font-size: 16px;
+                margin: 10px 0;
+            }
+        }
     </style>
 </head>
 
@@ -156,11 +299,12 @@
     </div>
 
     <div class="content">
-        <h1>需要予測</h1>
-        <div class="header-info" id="year-display"></div>
+        <main>
+            <h1>需要予測</h1>
+            <div class="header-info" id="year-display"></div>
 
-        <!-- 代わりにbackendがこちらに表示されるべき文字を提供しますedited by zhang -->
-        <!-- <script>
+            <!-- 代わりにbackendがこちらに表示されるべき文字を提供しますedited by zhang -->
+            <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const year = new Date().getFullYear();
             document.getElementById('year-display').textContent = `${year}年`;
@@ -178,45 +322,47 @@
         });
     </script> -->
 
-        <!-- 発注対象日の表示 -->
-        <div class="forecast-date" th:if="${isTodayOrderDay}"
-            th:text="'今日の発注日: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
-        </div>
-
-        <div class="forecast-date" th:unless="${isTodayOrderDay}"
-            th:text="'次回の発注日: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
-        </div>
-
-        <div class="forecast-date" th:text="${forecastLabel}">（予測対象日）</div>
-
-
-        <!-- 商品別予測本数 -->
-        <div class="product-forecast">
-            <div th:each="entry : ${predictedDemandMap}">
-                <span th:text="${entry.key}">ビール名</span><br>
-                <span th:text="${entry.value + '本'}">0本</span>
+            <!-- 発注対象日の表示 -->
+            <div class="forecast-date" th:if="${isTodayOrderDay}"
+                th:text="'本日は発注日です: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
             </div>
-        </div>
 
-        <!-- 次の7日間の天気と予測 -->
-        <table>
-            <thead>
-                <tr>
-                    <th>日付</th>
-                    <th>天気予報</th>
-                    <th>気温</th>
-                    <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="forecast : ${sevenDayForecastList}">
-                    <td th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
-                    <td th:text="${forecast.weather}">晴れ</td>
-                    <td th:text="${forecast.temperatureRange}">25〜30℃</td>
-                    <td th:each="entry : ${forecast.predictedDemandMap}" th:text="${entry.value + '本'}">0本</td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="forecast-date" th:unless="${isTodayOrderDay}"
+                th:text="'次回の発注日: ' + ${#temporals.format(nextOrderDate, 'M月d日(E)')}">
+            </div>
+
+            <div class="forecast-date" th:text="${forecastLabel}">（予測対象日）</div>
+
+
+            <!-- 商品別予測本数 -->
+            <div class="product-forecast">
+                <div th:each="entry : ${predictedDemandMap}">
+                    <span th:text="${entry.key}">ビール名</span><br>
+                    <span th:text="${entry.value + '本'}">0本</span>
+                </div>
+            </div>
+
+            <!-- 次の7日間の天気と予測 -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>天気予報</th>
+                        <th>気温</th>
+                        <th th:each="entry : ${predictedDemandMap}" th:text="${entry.key}">商品名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="forecast : ${sevenDayForecastList}">
+                        <td data-label="日付" th:text="${#temporals.format(forecast.date, 'M月d日(E)')}">6月18日(火)</td>
+                        <td data-label="天気予報" th:text="${forecast.weather}">晴れ</td>
+                        <td data-label="気温" th:text="${forecast.temperatureRange}">25〜30℃</td>
+                        <td data-label="商品名" th:each="entry : ${forecast.predictedDemandMap}"
+                            th:text="${entry.value + '本'}">0本</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
     </div>
 
 </body>

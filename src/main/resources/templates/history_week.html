@@ -11,6 +11,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: white;
+            
         }
 
         header {
@@ -20,6 +21,9 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
         }
 
         .layout {
@@ -32,6 +36,9 @@
             width: 200px;
             height: 100vh;
             flex-shrink: 0;
+            position: fixed;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -60,6 +67,8 @@
         .main {
             flex: 1;
             padding: 20px;
+            margin-top: 10%;
+            margin-left: 250px;
         }
 
         .header {
@@ -125,6 +134,56 @@
             width: 100% !important;
             height: 100% !important;
         }
+
+        @media screen and (max-width: 768px) {
+  header {
+    font-size: 18px;
+    padding: 15px;
+  }
+
+  .layout {
+    flex-direction: column;
+  }
+
+  aside {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-top: 0;
+    padding: 10px;
+  }
+
+  .main {
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 10px;
+  }
+
+  .header-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .week-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .weather-icons {
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+
+  canvas {
+    height: auto !important;
+  }
+}
     </style>
 </head>
 
@@ -150,11 +209,6 @@
 
 
         <main class="main">
-            <div class="header">
-                <h2>週ごとの販売実績と天気</h2>
-            </div>
-
-
             <div class="header-controls">
                 <h2>週ごとの販売実績と天気</h2>
                 <div class="week-buttons">

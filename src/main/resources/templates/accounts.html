@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>アカウント管理</title>
@@ -21,6 +22,13 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        main {
+            margin-top: 20%;
         }
 
         /* ===== サイドバー ===== */
@@ -31,6 +39,8 @@
             position: fixed;
             left: 0;
             height: 100%;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -113,7 +123,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
@@ -126,72 +137,154 @@
         .action-button {
             margin: 0 4px;
         }
+
+        @media screen and (max-width: 768px) {
+            header {
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            aside {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                margin-top: 0;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .search-filter {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            input[type="text"] {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+                padding: 10px;
+                border-radius: 4px;
+                background-color: #f9f9f9;
+            }
+
+            td {
+                text-align: left;
+                padding: 8px 5px;
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .action-button {
+                width: 48%;
+                margin: 5px 1%;
+                box-sizing: border-box;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<header>発注予測システム</header>
+    <header>発注予測システム</header>
 
-<div th:if="${isAdmin}">
-    <aside>
-        <ul>
-            <li><strong>メニュー</strong></li>
-            <li><a href="/forecast">需要予測</a></li>
+    <div th:if="${isAdmin}">
+        <aside>
+            <ul>
+                <li><strong>メニュー</strong></li>
+                <li><a href="/forecast">需要予測</a></li>
 
-            <li><a href="/sales_input">販売実績入力</a></li>
+                <li><a href="/sales_input">販売実績入力</a></li>
 
-            <li><a href="/history_all">すべての販売実績と天気</a></li>
-            <li><a href="/history_week">週ごとの販売実績と天気</a></li>
-            <li><a href="/products">商品管理</a></li>
-            <li><a href="/accounts">アカウント管理</a></li>
-            <li><a href="/login">ログアウト</a></li>
-        </ul>
-    </aside>
-</div>
-
-<div class="content">
-    <div class="header-bar">
-        <h2>アカウント管理</h2>
-        <button class="add-button" onclick="location.href='/accounts/add'">アカウント追加</button>
+                <li><a href="/history_all">すべての販売実績と天気</a></li>
+                <li><a href="/history_week">週ごとの販売実績と天気</a></li>
+                <li><a href="/products">商品管理</a></li>
+                <li><a href="/accounts">アカウント管理</a></li>
+                <li><a href="/login">ログアウト</a></li>
+            </ul>
+        </aside>
     </div>
 
-    
+    <div class="content">
+        <main>
+            <div class="header-bar">
+                <h2>アカウント管理</h2>
+                <button class="add-button" onclick="location.href='/accounts/add'">アカウント追加</button>
+            </div>
 
 
 
-    <table>
-        <thead>
-            <tr>
-                <th>氏名</th>
-                <th>アカウントID</th>
-                <th>パスワード</th>
-                <th>権限</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="account : ${accounts}">
-                <td th:text="${account.name}">山田太郎</td>
-                <td th:text="${account.email}">yamada@example.com</td>
-                <td th:text="${account.password}">password</td>
-                <td th:text="${account.isAdmin} ? '管理者' : '従業員'">従業員</td>
-                <td>
 
 
-                    <button class="action-button"
-                            th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
-
-                    <form th:action="@{/accounts/delete}" method="post" style="display:inline;">
-                        <input type="hidden" name="id" th:value="${account.id}" />
-                        <button class="action-button"
-                                type="submit"
-                                onclick="return confirm('本当にこのアカウントを削除しますか？');">削除</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>氏名</th>
+                        <th>アカウントID</th>
+                        <th>パスワード</th>
+                        <th>権限</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="account : ${accounts}">
+                        <td data-label="氏名" th:text="${account.name}">山田太郎</td>
+                        <td data-label="アカウントID" th:text="${account.email}">yamada@example.com</td>
+                        <td data-label="パスワード" th:text="${account.password}">password</td>
+                        <td data-label="権限" th:text="${account.isAdmin} ? '管理者' : '従業員'">従業員</td>
+                        <td data-label="操作">
+                            <button class="action-button"
+                                th:onclick="'location.href=\'/accounts/edit/' + ${account.id} + '\''">編集</button>
+                            <form th:action="@{/accounts/delete}" method="post" style="display:inline;">
+                                <input type="hidden" name="id" th:value="${account.id}" />
+                                <button class="action-button" type="submit"
+                                    onclick="return confirm('本当にこのアカウントを削除しますか？');">削除</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
 
 </body>
+
 </html>

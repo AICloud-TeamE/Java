@@ -22,33 +22,31 @@
         /* ===== ヘッダーのデザイン ===== */
         header {
             background-color: #ffc107;
-            /* ヘッダーの背景色を黄色系に設定 */
             color: black;
-            /* ヘッダーの文字色を黒に設定 */
             padding: 20px;
-            /* ヘッダー内部の余白を上下左右20pxに設定 */
             font-size: 24px;
-            /* フォントサイズを24pxに設定して大きめに */
             text-align: center;
-            /* テキストを中央寄せにする */
             font-weight: bold;
-            /* フォントを太字にする */
+            position: fixed;
+            width: 100%;
+            z-index: 100;
         }
 
-        /* ===== サイドバーのデザイン ===== */
+        main {
+            margin-top: 60px;
+            top: 0%;
+        }
+
+        /* ===== サイドバー ===== */
         aside {
             background-color: #fff177;
-            /* サイドバーの背景を明るい黄色に設定 */
             padding: 20px;
-            /* 内側の余白を20pxに */
             width: 200px;
-            /* サイドバーの幅を220pxに固定 */
             position: fixed;
-            /* 常に左端に固定表示されるようにする */
             left: 0;
-            /* 左端に配置 */
             height: 100%;
-            /* 高さを画面全体に広げる */
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -136,6 +134,41 @@
             background-color: #FFA000;
             /* ホバー時に濃いめの黄色に変更 */
         }
+
+        @media screen and (max-width: 768px) {
+  header {
+    font-size: 20px;
+    padding: 15px;
+  }
+
+  aside {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-top: 0;
+    padding: 10px;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .home-button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
     </style>
 
 </head>
@@ -166,14 +199,9 @@
 
         <div class="button-container">
 
-            <a href="/home" class="home-button">終了</a>
+            <a href="/sales_input" class="home-button">終了</a>
         </div>
     </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <a th:href="@{/sales_input}">
-            <button type="button">終了</button>
-            </a>
-        </div>
 
 
 </body>
