@@ -11,6 +11,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: white;
+            
         }
 
         header {
@@ -20,6 +21,9 @@
             font-size: 24px;
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
         }
 
         .layout {
@@ -32,6 +36,9 @@
             width: 200px;
             height: 100vh;
             flex-shrink: 0;
+            position: fixed;
+            margin-top: 60px;
+            top: 0%;
         }
 
         aside ul {
@@ -60,6 +67,8 @@
         .main {
             flex: 1;
             padding: 20px;
+            margin-top: 10%;
+            margin-left: 250px;
         }
 
         .header {
@@ -150,11 +159,6 @@
 
 
         <main class="main">
-            <div class="header">
-                <h2>週ごとの販売実績と天気</h2>
-            </div>
-
-
             <div class="header-controls">
                 <h2>週ごとの販売実績と天気</h2>
                 <div class="week-buttons">
