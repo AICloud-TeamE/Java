@@ -54,10 +54,18 @@ public class ForecastController {
     @GetMapping("/forecast")
     public String showForecastPage(HttpSession session,
             Model model) {
-
         String name = (String) session.getAttribute("userName");
         Integer userId = (Integer) session.getAttribute("userId");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+    if (isAdmin == null) {
+        return "redirect:/login";
+        }
+
+    if (!isAdmin) {
+        return "redirect:/home";
+        }
+        
+        
 
         model.addAttribute("userName", name);
         model.addAttribute("userId", userId);
